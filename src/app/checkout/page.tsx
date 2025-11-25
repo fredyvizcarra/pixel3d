@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useCartStore } from "../../../store/cart-store";
@@ -60,10 +61,11 @@ export default function CheckoutPage() {
                   >
                     {item.imageUrl && (
                       <div className="relative h-24 w-24 overflow-hidden rounded-2xl bg-white">
-                        <img
+                        <Image
                           src={item.imageUrl}
                           alt={item.name}
-                          className="h-full w-full object-cover"
+                          fill
+                          className="object-cover"
                         />
                       </div>
                     )}
@@ -74,11 +76,11 @@ export default function CheckoutPage() {
                             {item.name}
                           </p>
                           <p className="text-sm text-slate-500">
-                            ${((item.price / 100) || 0).toFixed(2)} c/u
+                            ${(item.price / 100 || 0).toFixed(2)} c/u
                           </p>
                         </div>
                         <p className="text-lg font-semibold text-slate-900">
-                          ${(item.price * item.quantity / 100).toFixed(2)}
+                          ${((item.price * item.quantity) / 100).toFixed(2)}
                         </p>
                       </div>
                       <div className="flex items-center gap-3">
@@ -137,7 +139,11 @@ export default function CheckoutPage() {
               </div>
 
               <form action={checkoutAction} className="space-y-4">
-                <input type="hidden" name="items" value={JSON.stringify(items)} />
+                <input
+                  type="hidden"
+                  name="items"
+                  value={JSON.stringify(items)}
+                />
                 <Button
                   type="submit"
                   className="w-full rounded-full bg-[#662d91] hover:bg-purple-600 text-base py-6"
