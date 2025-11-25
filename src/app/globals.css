@@ -30,6 +30,7 @@
   --chart-4: 43 74% 66%;
   --chart-5: 27 87% 67%;
   --radius: 0.5rem;
+  --color-purple-pixel: 274 53% 37%;
 }
 
 /* Base global styles using the new @layer syntax */

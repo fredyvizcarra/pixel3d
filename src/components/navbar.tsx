@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { cn } from "@/lib/utils";
 import {
   ShoppingCartIcon,
   Bars3Icon,
@@ -10,8 +11,10 @@ import {
 import { useCartStore } from "../../store/cart-store";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
+
 export const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState<boolean>(false);
+  const [isScrolled, setIsScrolled] = useState<boolean>(false);
   const { items } = useCartStore();
   const cartCount = items.reduce((acc, item) => acc + item.quantity, 0);
 
@@ -22,79 +25,238 @@ export const Navbar = () => {
       }
     };
 
-    window.addEventListener("resize", handleResize);
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 54);
+    };
 
-    return () => window.removeEventListener("resize", handleResize);
+    window.addEventListener("resize", handleResize);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
   return (
-    <nav className="sticky top-0 z-50 bg-white shadow">
-      <div className="container mx-auto flex items-center justify-between px-4 py-2">
-        <Link href="/" className="hover:text-blue-600">
-          <Image
-            src="/logo/p.png"
-            width={500}
-            height={500}
-            alt="Pixel P logo"
-            className="w-10"
-          />
-        </Link>
-        <div className="hidden md:flex space-x-6 items-center">
-          <Link href="/checkout" className="hover:text-blue-600">
+    <nav className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div
+        className={cn(
+          "mx-auto rounded-2xl backdrop-blur-sm border transition-all duration-300 shadow-lg",
+          isScrolled
+            ? " supports-[backdrop-filter]:bg-white/60"
+            : "bg-white/10 border-white/10"
+        )}
+      >
+        <div className="flex items-center justify-between px-6 py-4">
+          {/* Logo P y Pixel3D juntos - Izquierda */}
+          <Link
+            href="/"
+            className="flex items-center gap-3 hover:opacity-80 transition-opacity"
+          >
             <Image
-              src="/logo/pixel3d.png"
-              width={488}
-              height={113}
+              src="/logo/p.png"
+              width={40}
+              height={40}
               alt="Pixel P logo"
-              className="w-22"
+              className="w-10 h-10"
+            />
+            <Image
+              src={isScrolled ? "/logo/pixel3d.png" : "/logo/pixel3d-w.png"}
+              width={140}
+              height={35}
+              alt="Pixel3D logo"
+              className="h-6 w-auto"
             />
           </Link>
-          <Link href="/products" className="hover:text-blue-600">
-            Productos
-          </Link>
-        </div>
-        <div className="flex items-center space-x-4">
-          <Link href="/checkout" className="relative">
-            <ShoppingCartIcon className="h-6 w-6" />
-            {cartCount > 0 && (
-              <span className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white">
-                {cartCount}
-              </span>
-            )}
-          </Link>
-          <Button
-            variant="ghost"
-            className="md:hidden"
-            onClick={() => setMobileOpen((prev) => !prev)}
-          >
-            {mobileOpen ? (
-              <XMarkIcon className="h-6 w-6" />
-            ) : (
-              <Bars3Icon className="h-6 w-6" />
-            )}
-          </Button>
+
+          {/* Navegación y acciones - Centro/Derecha */}
+          <div className="hidden md:flex items-center gap-8">
+            {/* Link de navegación */}
+            <Link
+              href="/products"
+              className={cn(
+                "text-sm font-medium transition-colors duration-200",
+                isScrolled
+                  ? "text-slate-700 hover:text-purple-700"
+                  : "text-white hover:text-purple-600"
+              )}
+            >
+              Productos
+            </Link>
+
+            {/* Redes sociales */}
+            <div className="flex items-center gap-4">
+              <Link
+                href="https://www.instagram.com/pixel3dmx/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="relative group"
+              >
+                <Image
+                  src="/logo/insta.png"
+                  alt="Instagram"
+                  width={20}
+                  height={20}
+                  className={cn(
+                    "w-6 h-6 transition-all duration-300",
+                    isScrolled
+                      ? "opacity-70 hover:opacity-100"
+                      : "opacity-90 hover:opacity-100"
+                  )}
+                />
+              </Link>
+              <Link
+                href="https://www.tiktok.com/@pixel3d83"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="relative group"
+              >
+                <Image
+                  src="/logo/tiktok.png"
+                  alt="TikTok"
+                  width={20}
+                  height={20}
+                  className={cn(
+                    "w-6 h-6 transition-all duration-300",
+                    isScrolled
+                      ? "opacity-70 hover:opacity-100"
+                      : "opacity-90 hover:opacity-100"
+                  )}
+                />
+              </Link>
+            </div>
+
+            {/* Carrito */}
+            <Link href="/checkout" className="relative">
+              <ShoppingCartIcon
+                className={cn(
+                  "h-6 w-6 transition-colors",
+                  isScrolled
+                    ? "text-slate-700 hover:text-purple-700"
+                    : "text-white hover:text-purple-600"
+                )}
+              />
+              {cartCount > 0 && (
+                <span className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white font-semibold">
+                  {cartCount}
+                </span>
+              )}
+            </Link>
+          </div>
+
+          {/* Menú móvil - Derecha */}
+          <div className="flex items-center gap-3 md:hidden">
+            <Link href="/checkout" className="relative">
+              <ShoppingCartIcon
+                className={cn(
+                  "h-6 w-6 transition-colors",
+                  isScrolled
+                    ? "text-slate-700 hover:text-purple-700"
+                    : "text-white"
+                )}
+              />
+              {cartCount > 0 && (
+                <span className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white">
+                  {cartCount}
+                </span>
+              )}
+            </Link>
+            <Button
+              variant="ghost"
+              className={cn(
+                isScrolled
+                  ? "text-slate-700 hover:bg-slate-100"
+                  : "text-white hover:bg-white/20"
+              )}
+              onClick={() => setMobileOpen((prev) => !prev)}
+            >
+              {mobileOpen ? (
+                <XMarkIcon className="h-6 w-6" />
+              ) : (
+                <Bars3Icon className="h-6 w-6" />
+              )}
+            </Button>
+          </div>
         </div>
       </div>
+
+      {/* Menú móvil desplegable */}
       {mobileOpen && (
-        <nav className="md:hidden bg-white shadow-md">
-          <ul className="flex flex-col p-4 space-y-2">
+        <div
+          className={cn(
+            "md:hidden mt-2 mx-auto max-w-7xl px-4 rounded-2xl border shadow-lg",
+            isScrolled
+              ? "bg-white/95 backdrop-blur-md border-slate-200/50"
+              : "bg-white/40 backdrop-blur-md border-white/30"
+          )}
+        >
+          <ul className="flex flex-col p-4 space-y-3">
             <li>
-              <Link href="/" className="block hover:text-blue-600">
-                Home
+              <Link
+                href="/products"
+                onClick={() => setMobileOpen(false)}
+                className={cn(
+                  "block px-4 py-2 rounded-xl transition-colors",
+                  isScrolled
+                    ? "text-slate-700 hover:bg-purple-50 hover:text-purple-700"
+                    : "text-slate-800 hover:bg-white/20"
+                )}
+              >
+                Productos
               </Link>
             </li>
-            <li>
-              <Link href="/products" className="block hover:text-blue-600">
-                Products
-              </Link>
-            </li>
-            <li>
-              <Link href="/checkout" className="block hover:text-blue-600">
-                Checkout
-              </Link>
+            <li className="pt-3 border-t border-slate-300/30">
+              <div className="flex items-center gap-4 px-4">
+                <Link
+                  href="https://www.instagram.com/pixel3dmx/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 transition-opacity hover:opacity-80"
+                >
+                  <Image
+                    src="/logo/insta.png"
+                    alt="Instagram"
+                    width={20}
+                    height={20}
+                    className="w-5 h-5"
+                  />
+                  <span
+                    className={cn(
+                      "text-sm",
+                      isScrolled ? "text-slate-700" : "text-slate-800"
+                    )}
+                  >
+                    Instagram
+                  </span>
+                </Link>
+                <Link
+                  href="https://www.tiktok.com/@pixel3d83"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 transition-opacity hover:opacity-80"
+                >
+                  <Image
+                    src="/logo/tiktok.png"
+                    alt="TikTok"
+                    width={20}
+                    height={20}
+                    className="w-5 h-5"
+                  />
+                  <span
+                    className={cn(
+                      "text-sm",
+                      isScrolled ? "text-slate-700" : "text-slate-800"
+                    )}
+                  >
+                    TikTok
+                  </span>
+                </Link>
+              </div>
             </li>
           </ul>
-        </nav>
+        </div>
       )}
     </nav>
   );
