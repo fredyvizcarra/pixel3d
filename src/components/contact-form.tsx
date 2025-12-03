@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
-const WHATSAPP_NUMBER = "523316036983";
+const WHATSAPP_NUMBER = "523351969175";
 
 export const ContactForm = () => {
   const [formData, setFormData] = useState({
