@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Button } from "./ui/button";
 import { useCartStore } from "../../store/cart-store";
 import { useMemo, useState } from "react";
+import { getProductImages } from "@/lib/product-images";
 
 interface Props {
   product: Stripe.Product;
@@ -14,12 +15,19 @@ export const ProductDetail = ({ product }: Props) => {
   const { addItem } = useCartStore();
   const price = product.default_price as Stripe.Price;
   const priceAmount = price?.unit_amount ?? 0;
+  
+  // Obtener todas las imágenes (locales + Stripe)
+  const allImages = useMemo(
+    () => getProductImages(product.id, product.images ?? []),
+    [product.id, product.images]
+  );
+  
   const [selectedImage, setSelectedImage] = useState(
-    product.images?.[0] ?? null
+    allImages[0] ?? null
   );
   const [quantity, setQuantity] = useState<number>(1);
 
-  const galleryImages = useMemo(() => product.images ?? [], [product.images]);
+  const galleryImages = useMemo(() => allImages, [allImages]);
   const videoUrl =
     product.metadata?.video ||
     product.metadata?.videoUrl ||

@@ -3,6 +3,7 @@ import Stripe from "stripe";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import Image from "next/image";
 import { Button } from "./ui/button";
+import { getProductImages } from "@/lib/product-images";
 
 interface Props {
   product: Stripe.Product;
@@ -10,14 +11,17 @@ interface Props {
 
 export const ProductCard = ({ product }: Props) => {
   const price = product.default_price as Stripe.Price;
+  // Obtener la primera imagen disponible (local o Stripe)
+  const allImages = getProductImages(product.id, product.images ?? []);
+  const mainImage = allImages[0];
 
   return (
     <Link href={`/products/${product.id}`} className="block h-full group">
       <Card className="h-full flex flex-col overflow-hidden border-slate-200 hover:border-purple-300 hover:shadow-xl transition-all duration-300">
-        {product.images && product.images[0] && (
+        {mainImage && (
           <div className="relative w-full aspect-square overflow-hidden bg-slate-100">
             <Image
-              src={product.images[0]}
+              src={mainImage}
               alt={product.name}
               fill
               className="object-cover group-hover:scale-105 transition-transform duration-300"

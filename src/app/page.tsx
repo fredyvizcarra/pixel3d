@@ -1,33 +1,25 @@
-import { stripe } from "@/lib/stripe";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
-import { Carousel } from "@/components/carousel";
 import { ScrollAnimate } from "@/components/scroll-animate";
 import { ContactForm } from "@/components/contact-form";
 
-export default async function Home() {
-  const products = await stripe.products.list({
-    expand: ["data.default_price"],
-    limit: 8,
-  });
-
+export default function Home() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
       {/* seccion 1 */}
       <section className="relative isolate overflow-hidden bg-slate-950">
-        <div className="absolute inset-0">
+        {/* <div className="absolute inset-0">
           <Image
             src="/hero/heroprinter.png"
             alt="Impresoras 3D de alta gama"
             fill
             priority
-            className="object-cover opacity-90"
+            className="object-cover opacity-70"
           />
-        </div>
+        </div> */}
         <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/85 to-slate-900/50" />
-        <div className="mx-auto flex max-w-6xl flex-col gap-10 px-6 py-24 sm:px-8 md:flex-row md:items-center md:gap-16 lg:px-12 lg:py-32">
-          <div className="relative z-10 max-w-2xl space-y-6 text-white">
+        <div className="mx-auto flex max-w-7xl flex-col gap-10 px-6 pt-24 pb-8 sm:px-8 md:flex-row md:items-start md:gap-12 lg:px-12 lg:py-32">
+          <div className="relative z-10 max-w-lg space-y-6 text-white">
             <span className="inline-flex items-center rounded-full bg-emerald-500/10 px-3 py-1 text-sm font-medium uppercase tracking-wide text-purple-300 ring-1 ring-inset ring-[#662d91]">
               Impresión 3D premium
             </span>
@@ -39,23 +31,6 @@ export default async function Home() {
               profesional. Compra desde nuestro catálogo o solicita tu impresión
               personalizada.
             </p>
-            <div className="flex flex-col items-start gap-4 sm:flex-row">
-              <Button
-                asChild
-                size="lg"
-                className="rounded-full bg-[#662d91] px-8 py-6 text-base font-medium text-white hover:bg-purple-400"
-              >
-                <Link href="/products">Explorar catálogo</Link>
-              </Button>
-              <Button
-                asChild
-                variant="secondary"
-                size="lg"
-                className="rounded-full border border-white/40 bg-transparent px-8 py-6 text-base font-medium text-white hover:bg-white/10"
-              >
-                <Link href="/services">Conocer servicios</Link>
-              </Button>
-            </div>
             <div className="flex flex-wrap items-center gap-6 text-sm text-slate-200/80">
               <div>
                 <p className="font-semibold text-white">
@@ -72,16 +47,106 @@ export default async function Home() {
               </div>
             </div>
           </div>
-          <div className="relative z-10 flex w-full max-w-md flex-col gap-4 rounded-3xl border border-white/10 bg-white/10 p-6 backdrop-blur">
-            <h2 className="text-lg font-semibold text-white">
-              Colección destacada
-            </h2>
-            <p className="text-sm text-slate-200">
-              Modelos seleccionados por su popularidad y calidad de impresión.
-            </p>
-            <div className="overflow-hidden rounded-2xl border border-white/10 bg-slate-950/60 ">
-              <Carousel products={products.data.slice(0, 5)} />
-            </div>
+          <div className="relative z-10 grid w-full gap-6 md:flex-1 lg:grid-cols-2">
+            <Link
+              href="/products"
+              className="group relative min-h-[520px] overflow-hidden rounded-3xl border border-white/10 bg-black"
+            >
+              <div
+                className="absolute inset-0 opacity-70 will-change-transform [filter:grayscale(1)_saturate(0)] group-hover:opacity-95 group-hover:[filter:grayscale(0)_saturate(1)] group-hover:scale-[1.07] group-hover:rotate-[1.25deg]"
+                style={{
+                  transform: "translate3d(0,0,0) scale(1) rotate(0deg)",
+                  transition:
+                    "transform 7000ms cubic-bezier(0.22, 1, 0.36, 1), filter 2200ms cubic-bezier(0.22, 1, 0.36, 1), opacity 2200ms cubic-bezier(0.22, 1, 0.36, 1)",
+                }}
+              >
+                <Image
+                  src="/hero/psyche.jpg"
+                  alt="Fondo artístico del catálogo"
+                  fill
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/15" />
+              <div className="relative z-10 flex h-full flex-col justify-between p-8 sm:hidden">
+                <div className="text-3xl text-zinc-200 transition-colors group-hover:text-white">
+                  01
+                </div>
+                <div>
+                  <h4 className="mb-4 text-[30px] font-medium text-white">
+                    Catalogo
+                  </h4>
+                  <p className="text-[16px] font-light leading-relaxed text-zinc-200">
+                    Revisa nuestro catalogo de productos y encuentra la pieza
+                    ideal para tus proyectos.
+                  </p>
+                </div>
+              </div>
+              <div className="hidden sm:block">
+                <div className="absolute left-12 top-12 z-10 text-3xl text-zinc-200 transition-colors group-hover:text-white">
+                  01
+                </div>
+                <div className="absolute left-12 top-1/2 z-10 -translate-y-1/2">
+                  <h4 className="text-[30px] font-bold text-white">Catalogo</h4>
+                </div>
+                <div className="absolute left-12 right-12 top-1/2 z-10 translate-y-12">
+                  <p className="text-[18px] font-light leading-relaxed text-zinc-200">
+                    Revisa nuestro catalogo de productos y encuentra la pieza
+                    ideal para tus proyectos.
+                  </p>
+                </div>
+              </div>
+            </Link>
+
+            <Link
+              href="/services"
+              className="group relative min-h-[520px] overflow-hidden rounded-3xl border border-white/10 bg-black"
+            >
+              <div
+                className="absolute inset-0 opacity-70 will-change-transform [filter:grayscale(1)_saturate(0)] group-hover:opacity-95 group-hover:[filter:grayscale(0)_saturate(1)] group-hover:scale-[1.06] group-hover:translate-x-[-1.5%] group-hover:translate-y-[-1%]"
+                style={{
+                  transform: "translate3d(0,0,0) scale(1)",
+                  transition:
+                    "transform 7000ms cubic-bezier(0.22, 1, 0.36, 1), filter 2200ms cubic-bezier(0.22, 1, 0.36, 1), opacity 2200ms cubic-bezier(0.22, 1, 0.36, 1)",
+                }}
+              >
+                <Image
+                  src="/hero/polis.jpg"
+                  alt="Fondo artístico de servicios"
+                  fill
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/15" />
+              <div className="relative z-10 flex h-full flex-col justify-between p-8 sm:hidden">
+                <div className="text-3xl text-zinc-200 transition-colors group-hover:text-white">
+                  02
+                </div>
+                <div>
+                  <h4 className="mb-4 text-[30px] font-bold text-white">
+                    Servicios
+                  </h4>
+                  <p className="text-[16px] font-light leading-relaxed text-zinc-200">
+                    Conoce nuestros servicios de impresion 3D para proyectos
+                    personalizados, prototipos y produccion.
+                  </p>
+                </div>
+              </div>
+              <div className="hidden sm:block">
+                <div className="absolute left-12 top-12 z-10 text-3xl text-zinc-200 transition-colors group-hover:text-white">
+                  02
+                </div>
+                <div className="absolute left-12 top-1/2 z-10 -translate-y-1/2">
+                  <h4 className="text-[30px] font-bold text-white">Servicios</h4>
+                </div>
+                <div className="absolute left-12 right-12 top-1/2 z-10 translate-y-12">
+                  <p className="text-[18px] font-light leading-relaxed text-zinc-200">
+                    Conoce nuestros servicios de impresion 3D para proyectos
+                    personalizados, prototipos y produccion.
+                  </p>
+                </div>
+              </div>
+            </Link>
           </div>
         </div>
       </section>
