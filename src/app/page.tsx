@@ -1,4 +1,3 @@
-import Link from "next/link";
 import Image from "next/image";
 import { ScrollAnimate } from "@/components/scroll-animate";
 import { ContactForm } from "@/components/contact-form";
