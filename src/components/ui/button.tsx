@@ -14,7 +14,9 @@ const buttonVariants = cva(
         secondary:
           "rounded-[12px] border border-not-quite-black bg-snow text-not-quite-black hover:bg-off-white",
         outline:
-          "rounded-[12px] border border-snow bg-transparent text-snow hover:bg-snow/10",
+          "rounded-[12px] border border-line bg-transparent text-snow hover:border-fog hover:bg-snow/5",
+        world:
+          "rounded-[12px] bg-[var(--w-a)] text-[var(--w-a-text)] hover:brightness-110",
         ghost:
           "rounded-[12px] bg-transparent text-snow hover:bg-snow/10",
         login:

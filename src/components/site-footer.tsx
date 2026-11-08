@@ -12,7 +12,7 @@ export const SiteFooter = () => {
   }
 
   return (
-    <footer className="bg-not-quite-black">
+    <footer className="border-t border-line bg-panel">
       <div className="mx-auto grid max-w-[1200px] gap-12 px-6 py-16 sm:grid-cols-2 lg:grid-cols-4">
         <div className="space-y-4">
           <Image
@@ -31,7 +31,10 @@ export const SiteFooter = () => {
           <p className="text-sm font-medium tracking-[0.013em] text-snow">
             Tienda
           </p>
-          <Link href="/" className="block text-sm text-fog hover:text-snow">
+          <Link href="/#colecciones" className="block text-sm text-fog hover:text-snow">
+            Colecciones
+          </Link>
+          <Link href="/#catalogo" className="block text-sm text-fog hover:text-snow">
             Catálogo
           </Link>
           <Link href="/nosotros" className="block text-sm text-fog hover:text-snow">

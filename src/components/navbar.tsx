@@ -6,165 +6,111 @@ import { ShoppingCartIcon, Bars3Icon, XMarkIcon } from "@heroicons/react/24/outl
 import { useCartStore } from "../../store/cart-store"
 import { useEffect, useState } from "react"
 import { usePathname } from "next/navigation"
-import { Button } from "./ui/button"
-import { Badge } from "./ui/badge"
+
+const LINKS = [
+  { href: "/#colecciones", label: "Colecciones" },
+  { href: "/#catalogo", label: "Catálogo" },
+  { href: "/#personalizados", label: "Personalizados" },
+  { href: "/nosotros", label: "Nosotros" },
+]
 
 export const Navbar = () => {
   const pathname = usePathname()
   const [mobileOpen, setMobileOpen] = useState<boolean>(false)
-  const [isScrolled, setIsScrolled] = useState<boolean>(false)
+  const [mounted, setMounted] = useState<boolean>(false)
   const { items } = useCartStore()
   const cartCount = items.reduce((acc, item) => acc + item.quantity, 0)
 
   useEffect(() => {
+    setMounted(true)
     const handleResize = () => {
-      if (window.innerWidth >= 768) {
-        setMobileOpen(false)
-      }
+      if (window.innerWidth >= 768) setMobileOpen(false)
     }
-
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 54)
-    }
-
     window.addEventListener("resize", handleResize)
-    window.addEventListener("scroll", handleScroll, { passive: true })
-    handleScroll()
-
-    return () => {
-      window.removeEventListener("resize", handleResize)
-      window.removeEventListener("scroll", handleScroll)
-    }
+    return () => window.removeEventListener("resize", handleResize)
   }, [])
+
+  useEffect(() => {
+    setMobileOpen(false)
+  }, [pathname])
 
   if (pathname?.startsWith("/admin")) {
     return null
   }
 
-  const handleToggleMobile = () => {
-    setMobileOpen((prev) => !prev)
-  }
-
-  const handleCloseMobile = () => {
-    setMobileOpen(false)
-  }
+  // El carrito vive en localStorage: solo se muestra el contador ya montado
+  const showCount = mounted && cartCount > 0
 
   return (
-    <nav className="fixed top-4 left-1/2 z-50 w-full max-w-[1200px] -translate-x-1/2 px-4 sm:px-6">
-      <div
-        className={
-          isScrolled
-            ? "mx-auto rounded-[16px] border border-snow/10 bg-not-quite-black/80 backdrop-blur-md"
-            : "mx-auto rounded-[16px] border border-snow/10 bg-snow/5 backdrop-blur-md"
-        }
-      >
-        <div className="flex items-center justify-between px-6 py-3">
-          <Link
-            href="/"
-            className="flex items-center gap-3 hover:opacity-80"
-            aria-label="Pixel3D inicio"
-          >
-            <Image
-              src="/logo/p.png"
-              width={40}
-              height={40}
-              alt=""
-              className="h-10 w-10"
-            />
-            <Image
-              src="/logo/pixel3d-w.png"
-              width={140}
-              height={35}
-              alt="Pixel3D"
-              className="h-6 w-auto"
-            />
-          </Link>
+    <nav className="sticky top-0 z-50 border-b border-line bg-cosmic/85 backdrop-blur-md">
+      <div className="mx-auto flex max-w-[1200px] items-center gap-6 px-4 py-3 sm:px-6">
+        <Link
+          href="/"
+          className="flex items-center gap-2.5 hover:opacity-85"
+          aria-label="Pixel3D inicio"
+        >
+          <Image src="/logo/p.png" width={36} height={36} alt="" className="h-9 w-9" priority />
+          <Image
+            src="/logo/pixel3d-w.png"
+            width={140}
+            height={35}
+            alt="Pixel3D"
+            className="h-5 w-auto"
+            priority
+          />
+        </Link>
 
-          <div className="hidden items-center gap-6 md:flex">
+        <div className="ml-auto hidden items-center gap-6 md:flex">
+          {LINKS.map((link) => (
             <Link
-              href="/"
-              className="text-base font-medium tracking-[0.013em] text-snow hover:text-hover-blurple"
+              key={link.href}
+              href={link.href}
+              className="text-[15px] font-medium text-fog transition-colors hover:text-snow"
             >
-              Catálogo
+              {link.label}
             </Link>
-            <Link
-              href="/nosotros"
-              className="text-base font-medium tracking-[0.013em] text-snow hover:text-hover-blurple"
-            >
-              Nosotros
-            </Link>
-            <Link
-              href="/nosotros#contacto"
-              className="text-base font-medium tracking-[0.013em] text-snow hover:text-hover-blurple"
-            >
-              Contacto
-            </Link>
-            <Button asChild variant="login" size="sm" className="shrink-0">
-              <Link href="/checkout" aria-label="Carrito de compras">
-                <ShoppingCartIcon className="size-5" />
-                Carrito
-                {cartCount > 0 && (
-                  <Badge className="bg-blurple text-snow">{cartCount}</Badge>
-                )}
-              </Link>
-            </Button>
-          </div>
-
-          <div className="flex items-center gap-2 md:hidden">
-            <Link href="/checkout" className="relative text-snow" aria-label="Carrito">
-              <ShoppingCartIcon className="h-6 w-6" />
-              {cartCount > 0 && (
-                <span className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-blurple text-xs font-semibold text-snow">
-                  {cartCount}
-                </span>
-              )}
-            </Link>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={handleToggleMobile}
-              aria-label={mobileOpen ? "Cerrar menú" : "Abrir menú"}
-            >
-              {mobileOpen ? (
-                <XMarkIcon className="h-6 w-6" />
-              ) : (
-                <Bars3Icon className="h-6 w-6" />
-              )}
-            </Button>
-          </div>
+          ))}
         </div>
+
+        <Link
+          href="/checkout"
+          aria-label={showCount ? `Carrito, ${cartCount} artículos` : "Carrito"}
+          className="ml-auto flex items-center gap-2 rounded-full border border-line px-3.5 py-1.5 text-sm font-medium text-snow transition-colors hover:border-blurple md:ml-0"
+        >
+          <ShoppingCartIcon className="size-5" />
+          <span className="hidden sm:inline">Carrito</span>
+          {showCount && (
+            <span className="rounded-full bg-blurple px-2 text-[11px] leading-5 font-semibold text-snow">
+              {cartCount}
+            </span>
+          )}
+        </Link>
+
+        <button
+          type="button"
+          onClick={() => setMobileOpen((prev) => !prev)}
+          aria-label={mobileOpen ? "Cerrar menú" : "Abrir menú"}
+          aria-expanded={mobileOpen}
+          className="rounded-[10px] p-1.5 text-snow hover:bg-snow/10 md:hidden"
+        >
+          {mobileOpen ? <XMarkIcon className="h-6 w-6" /> : <Bars3Icon className="h-6 w-6" />}
+        </button>
       </div>
 
       {mobileOpen && (
-        <div className="mt-2 rounded-[16px] border border-snow/10 bg-not-quite-black/95 p-4 backdrop-blur-md md:hidden">
-          <ul className="space-y-2">
-            <li>
-              <Link
-                href="/"
-                onClick={handleCloseMobile}
-                className="block rounded-[12px] px-4 py-2 text-snow hover:bg-snow/10"
-              >
-                Catálogo
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/nosotros"
-                onClick={handleCloseMobile}
-                className="block rounded-[12px] px-4 py-2 text-snow hover:bg-snow/10"
-              >
-                Nosotros
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/nosotros#contacto"
-                onClick={handleCloseMobile}
-                className="block rounded-[12px] px-4 py-2 text-snow hover:bg-snow/10"
-              >
-                Contacto
-              </Link>
-            </li>
+        <div className="border-t border-line px-4 pb-4 md:hidden">
+          <ul className="space-y-1 pt-2">
+            {LINKS.map((link) => (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  onClick={() => setMobileOpen(false)}
+                  className="block rounded-[10px] px-3 py-2.5 text-snow hover:bg-snow/10"
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
       )}

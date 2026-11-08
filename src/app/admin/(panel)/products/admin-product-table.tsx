@@ -58,7 +58,7 @@ export const AdminProductTable = ({ products }: Props) => {
             <thead className="bg-slate-50 text-slate-500">
               <tr>
                 <th className="px-4 py-3 font-medium">Producto</th>
-                <th className="px-4 py-3 font-medium">Categoría</th>
+                <th className="px-4 py-3 font-medium">Colección</th>
                 <th className="px-4 py-3 font-medium">Precio</th>
                 <th className="px-4 py-3 font-medium">Stock</th>
                 <th className="px-4 py-3 font-medium">Fotos</th>

@@ -4,24 +4,24 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: #0e0f2d;
+  --background: #0b0d16;
   --foreground: #ffffff;
-  --card: #2c2f33;
+  --card: #141828;
   --card-foreground: #ffffff;
-  --popover: #23272a;
+  --popover: #141828;
   --popover-foreground: #ffffff;
   --primary: #5865f2;
   --primary-foreground: #ffffff;
   --secondary: #ffffff;
   --secondary-foreground: #23272a;
-  --muted: #23272a;
-  --muted-foreground: #babcd9;
+  --muted: #141828;
+  --muted-foreground: #9aa0bd;
   --accent: #3442d9;
   --accent-foreground: #ffffff;
   --destructive: #de2761;
   --destructive-foreground: #ffffff;
-  --border: #50555f;
-  --input: #50555f;
+  --border: #262b40;
+  --input: #2c3250;
   --ring: #8891f2;
   --chart-1: #5865f2;
   --chart-2: #57f287;
@@ -29,13 +29,13 @@
   --chart-4: #fda220;
   --chart-5: #eb459e;
   --radius: 0.75rem;
-  --sidebar: #23272a;
+  --sidebar: #141828;
   --sidebar-foreground: #ffffff;
   --sidebar-primary: #5865f2;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #2c2f33;
+  --sidebar-accent: #1a1f33;
   --sidebar-accent-foreground: #ffffff;
-  --sidebar-border: #50555f;
+  --sidebar-border: #262b40;
   --sidebar-ring: #8891f2;
 }
 
@@ -76,8 +76,9 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-nunito), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-onest), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-unbounded), "Arial Black", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, Menlo, monospace;
 }
 
 @theme {
@@ -91,14 +92,16 @@
   --color-ekko-red: #de2761;
   --color-void: #000000;
   --color-snow: #ffffff;
-  --color-not-quite-black: #23272a;
-  --color-dark-charcoal: #2c2f33;
+  --color-not-quite-black: #141828;
+  --color-dark-charcoal: #1a1f33;
   --color-graphite: #333333;
-  --color-fog: #babcd9;
-  --color-greyple: #99aab5;
-  --color-dim-grey: #50555f;
+  --color-fog: #9aa0bd;
+  --color-greyple: #7c82a0;
+  --color-dim-grey: #2c3250;
   --color-off-white: #f6f6f6;
-  --color-cosmic: #0e0f2d;
+  --color-cosmic: #0b0d16;
+  --color-panel: #141828;
+  --color-line: #262b40;
 }
 
 @layer base {
@@ -124,5 +127,142 @@
 
   .text-body-fog {
     @apply text-fog leading-normal;
+  }
+}
+
+/* ------------------------------------------------------------------
+   Pixel3D · marca
+   ------------------------------------------------------------------ */
+:root {
+  /* Tokens de "mundo" por defecto (se sobrescriben en cada colección) */
+  --w-a: var(--color-blurple);
+  --w-a-text: #ffffff;
+  --w-text: var(--color-snow);
+  --w-muted: var(--color-fog);
+  --w-card: var(--color-panel);
+  --w-card-text: var(--color-snow);
+  --w-card-muted: var(--color-fog);
+  --w-card-border: var(--color-line);
+  --w-ph: linear-gradient(135deg, #1a1f33, #10131f);
+  --w-title-font: var(--font-unbounded), "Arial Black", sans-serif;
+  --w-title-weight: 800;
+  --w-title-transform: uppercase;
+  --w-title-tracking: -0.02em;
+  --w-title-skew: 0deg;
+}
+
+@layer utilities {
+  .eyebrow {
+    @apply font-mono text-xs uppercase text-fog;
+    letter-spacing: 0.14em;
+  }
+
+  .bg-blueprint {
+    background:
+      radial-gradient(60% 80% at 85% 30%, color-mix(in srgb, var(--color-blurple) 18%, transparent), transparent 70%),
+      linear-gradient(var(--color-line) 1px, transparent 1px) 0 0 / 40px 40px,
+      linear-gradient(90deg, var(--color-line) 1px, transparent 1px) 0 0 / 40px 40px,
+      var(--color-cosmic);
+  }
+
+  .world-title {
+    font-family: var(--w-title-font);
+    font-weight: var(--w-title-weight);
+    text-transform: var(--w-title-transform);
+    letter-spacing: var(--w-title-tracking);
+    transform: skewX(var(--w-title-skew));
+    text-wrap: balance;
+  }
+
+  .world-title .hl {
+    color: var(--w-a);
+  }
+}
+
+/* ------------------------------------------------------------------
+   Mundos (temas de colección)
+   ------------------------------------------------------------------ */
+.world {
+  color: var(--w-text);
+  position: relative;
+  isolation: isolate;
+}
+
+.world-default {
+  background:
+    radial-gradient(70% 90% at 85% 0%, color-mix(in srgb, var(--w-a) 30%, transparent), transparent 65%),
+    linear-gradient(var(--color-line) 1px, transparent 1px) 0 0 / 40px 40px,
+    linear-gradient(90deg, var(--color-line) 1px, transparent 1px) 0 0 / 40px 40px,
+    var(--color-cosmic);
+}
+
+.world-gameday {
+  --w-a: #e8333f;
+  --w-b: #1f4fd1;
+  --w-text: #f4f6f2;
+  --w-muted: #b9c9bd;
+  --w-card: #0a1d13;
+  --w-card-text: #f4f6f2;
+  --w-card-muted: #9fb3a6;
+  --w-card-border: rgb(255 255 255 / 0.08);
+  --w-ph: linear-gradient(135deg, #10301f, #0a1d13);
+  --w-title-font: var(--font-saira), "Arial Narrow", sans-serif;
+  --w-title-weight: 900;
+  --w-title-tracking: 0.01em;
+  --w-title-skew: -8deg;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 calc(10% - 2px), rgb(255 255 255 / 0.1) calc(10% - 2px) 10%),
+    linear-gradient(180deg, #0d2a1c, #08170f);
+}
+
+.world-navidad {
+  --w-a: #e6b655;
+  --w-b: #c8303c;
+  --w-a-text: #1d2a22;
+  --w-text: #f6f0e2;
+  --w-muted: #cdbf9f;
+  --w-card: #f6f0e2;
+  --w-card-text: #1d2a22;
+  --w-card-muted: #5b6b60;
+  --w-card-border: transparent;
+  --w-ph: radial-gradient(circle at 50% 40%, #fffaf0, #eadfc6);
+  --w-title-font: var(--font-young-serif), Georgia, serif;
+  --w-title-weight: 400;
+  --w-title-transform: none;
+  --w-title-tracking: 0;
+  background:
+    radial-gradient(circle at 20% 30%, rgb(255 255 255 / 0.4) 1.5px, transparent 2px) 0 0 / 52px 52px,
+    radial-gradient(circle at 70% 60%, rgb(255 255 255 / 0.25) 1px, transparent 1.5px) 0 0 / 31px 31px,
+    radial-gradient(70% 60% at 80% 0%, rgb(230 182 85 / 0.22), transparent 70%),
+    #0e2219;
+}
+
+.world-magico {
+  --w-a: #d9b25f;
+  --w-b: #7a2b4a;
+  --w-a-text: #1b0f2c;
+  --w-text: #efe6f7;
+  --w-muted: #bfaed1;
+  --w-card: #251638;
+  --w-card-text: #efe6f7;
+  --w-card-muted: #bfaed1;
+  --w-card-border: rgb(217 178 95 / 0.35);
+  --w-ph: radial-gradient(circle at 50% 35%, #3a2352, #1f1230);
+  --w-title-font: var(--font-cinzel), "Times New Roman", serif;
+  --w-title-weight: 800;
+  --w-title-transform: none;
+  --w-title-tracking: 0.04em;
+  background:
+    radial-gradient(circle at 30% 40%, rgb(217 178 95 / 0.6) 1px, transparent 1.6px) 0 0 / 61px 61px,
+    radial-gradient(70% 70% at 15% 0%, rgb(122 43 74 / 0.55), transparent 65%),
+    #1b0f2c;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
   }
 }

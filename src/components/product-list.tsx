@@ -11,18 +11,24 @@ type SortOption = "name" | "price-asc" | "price-desc" | "newest"
 
 interface Props {
   products: Product[]
-  categories: Category[]
+  categories?: Category[]
+  /** Oculta los filtros por colección (en la página de una colección) */
+  showCategories?: boolean
 }
 
 const chipClass = (active: boolean) =>
   cn(
     "rounded-full border px-3 py-1.5 text-sm font-medium whitespace-nowrap transition-colors",
     active
-      ? "border-blurple bg-blurple text-snow"
-      : "border-dim-grey bg-not-quite-black text-fog hover:border-hover-blurple hover:text-snow"
+      ? "border-[var(--w-a)] bg-[var(--w-a)] text-[var(--w-a-text)]"
+      : "border-current/25 text-[var(--w-muted)] hover:border-current/60 hover:text-[var(--w-text)]"
   )
 
-export const ProductList = ({ products, categories }: Props) => {
+export const ProductList = ({
+  products,
+  categories = [],
+  showCategories = true,
+}: Props) => {
   const [searchTerm, setSearchTerm] = useState("")
   const [categoryId, setCategoryId] = useState("all")
   const [stockFilter, setStockFilter] = useState<StockFilter>("all")
@@ -52,7 +58,7 @@ export const ProductList = ({ products, categories }: Props) => {
     return counts
   }, [products])
 
-  const visibleCategories = categories
+  const visibleCategories = showCategories ? categories : []
 
   const filteredProducts = useMemo(() => {
     const term = searchTerm.trim().toLowerCase()
@@ -106,13 +112,13 @@ export const ProductList = ({ products, categories }: Props) => {
     sortOption !== "name"
 
   return (
-    <div className="mx-auto max-w-[1200px] px-4 sm:px-6">
+    <div>
       <div className="mb-8 space-y-4">
         {visibleCategories.length > 0 && (
           <div
             className="flex gap-2 overflow-x-auto pb-1"
             role="group"
-            aria-label="Filtrar por categoría"
+            aria-label="Filtrar por colección"
           >
             <button
               type="button"
@@ -143,7 +149,7 @@ export const ProductList = ({ products, categories }: Props) => {
                 className={chipClass(categoryId === "none")}
                 aria-pressed={categoryId === "none"}
               >
-                Sin categoría
+                Otras
                 <span className="ml-1 text-xs opacity-70">
                   {uncategorizedCount}
                 </span>
@@ -192,7 +198,7 @@ export const ProductList = ({ products, categories }: Props) => {
               value={sortOption}
               onChange={handleSortChange}
               aria-label="Ordenar productos"
-              className="h-9 rounded-[12px] border border-dim-grey bg-not-quite-black px-3 text-sm text-snow outline-none focus-visible:border-blurple focus-visible:ring-2 focus-visible:ring-hover-blurple/40"
+              className="h-9 rounded-[12px] border border-current/25 bg-void/30 px-3 text-sm text-[var(--w-text)] outline-none focus-visible:border-[var(--w-a)] focus-visible:ring-2 focus-visible:ring-[var(--w-a)]/40"
             >
               <option value="name">A–Z</option>
               <option value="newest">Más nuevos</option>
@@ -208,10 +214,10 @@ export const ProductList = ({ products, categories }: Props) => {
               onChange={handleSearchChange}
               placeholder="Buscar..."
               aria-label="Buscar productos"
-              className="h-9 pl-9 text-sm"
+              className="h-9 border-current/25 bg-void/30 pl-9 text-sm text-[var(--w-text)]"
             />
             <svg
-              className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-greyple"
+              className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-[var(--w-muted)]"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -227,7 +233,7 @@ export const ProductList = ({ products, categories }: Props) => {
           </div>
         </div>
 
-        <div className="flex items-center justify-between gap-3 text-sm text-greyple">
+        <div className="flex items-center justify-between gap-3 text-sm text-[var(--w-muted)]">
           <p>
             {filteredProducts.length}{" "}
             {filteredProducts.length === 1 ? "producto" : "productos"}
@@ -236,7 +242,7 @@ export const ProductList = ({ products, categories }: Props) => {
             <button
               type="button"
               onClick={handleClearFilters}
-              className="text-fog underline-offset-4 hover:text-snow hover:underline"
+              className="underline-offset-4 hover:text-[var(--w-text)] hover:underline"
             >
               Quitar filtros
             </button>
@@ -246,12 +252,12 @@ export const ProductList = ({ products, categories }: Props) => {
 
       {filteredProducts.length === 0 ? (
         <div className="py-12 text-center">
-          <p className="text-lg text-fog">
+          <p className="text-lg text-[var(--w-muted)]">
             No hay productos con esos filtros.
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="grid grid-cols-1 gap-4 min-[440px]:grid-cols-2 lg:grid-cols-4">
           {filteredProducts.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}

@@ -197,14 +197,14 @@ export const ProductForm = ({ product, categories, storageReady }: Props) => {
           />
         </label>
         <label className="block space-y-1.5">
-          <span className="text-sm font-medium text-slate-700">Categoría</span>
+          <span className="text-sm font-medium text-slate-700">Colección</span>
           <select
             name="categoryId"
             defaultValue={product?.categoryId ?? ""}
-            aria-label="Categoría del producto"
+            aria-label="Colección del producto"
             className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20"
           >
-            <option value="">Sin categoría</option>
+            <option value="">Sin colección</option>
             {categories.map((category) => (
               <option key={category.id} value={category.id}>
                 {category.name}

@@ -26,7 +26,7 @@ export const AdminShell = ({ children }: { children: React.ReactNode }) => {
                 href="/admin/categories"
                 className="text-slate-600 hover:text-purple-700"
               >
-                Categorías
+                Colecciones
               </Link>
               <Link
                 href="/admin/products/import"

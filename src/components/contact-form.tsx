@@ -6,8 +6,8 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Heading } from "@/components/ui/heading"
+import { whatsappUrl as buildWhatsappUrl } from "@/lib/contact"
 
-const WHATSAPP_NUMBER = "523351969175"
 
 export const ContactForm = () => {
   const [formData, setFormData] = useState({
@@ -18,9 +18,7 @@ export const ContactForm = () => {
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault()
     const whatsappMessage = `Hola, soy ${formData.name}.\n\nMensaje: ${formData.message}`
-    const encodedMessage = encodeURIComponent(whatsappMessage)
-    const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`
-    window.open(whatsappUrl, "_blank")
+    window.open(buildWhatsappUrl(whatsappMessage), "_blank")
     setFormData({ name: "", message: "" })
   }
 

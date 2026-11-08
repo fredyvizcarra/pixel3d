@@ -19,7 +19,7 @@ export default async function AdminProductsPage({
         <div>
           <h1 className="text-3xl font-semibold text-slate-900">Productos</h1>
           <p className="mt-1 text-slate-500">
-            Edita fotos, precio, stock y categoría. Los cambios se ven en el
+            Edita fotos, precio, stock y colección. Los cambios se ven en el
             catálogo.
           </p>
         </div>

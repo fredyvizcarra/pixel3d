@@ -1,26 +1,13 @@
 import type { Metadata } from "next"
-import { Inter, Nunito } from "next/font/google"
 import { Navbar } from "@/components/navbar"
 import { SiteFooter } from "@/components/site-footer"
+import { fontVariables } from "@/lib/fonts"
 import "./globals.css"
 
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-})
-
-const nunito = Nunito({
-  subsets: ["latin"],
-  weight: ["700", "800"],
-  variable: "--font-nunito",
-  display: "swap",
-})
-
 export const metadata: Metadata = {
-  title: "Pixel3D — Catálogo de impresión 3D",
+  title: "Pixel3D · Impresión 3D en México",
   description:
-    "Compra piezas de impresión 3D en México. Figuras, accesorios y proyectos a medida.",
+    "Piezas de impresión 3D por colecciones: Game Day, Navidad, Mundo Mágico y más. Diseños propios y personalizados, con envío a todo México.",
   icons: {
     icon: [
       { url: "/favicon/favicon-16x16.png", sizes: "16x16", type: "image/png" },
@@ -44,7 +31,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="es" className={`${inter.variable} ${nunito.variable}`}>
+    <html lang="es" className={fontVariables}>
       <body className="flex min-h-screen flex-col bg-cosmic font-sans text-snow">
         <Navbar />
         <main className="w-full flex-grow">{children}</main>

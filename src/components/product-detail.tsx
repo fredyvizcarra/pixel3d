@@ -10,9 +10,10 @@ import { cn } from "@/lib/utils"
 
 interface Props {
   product: Product
+  collectionName?: string | null
 }
 
-export const ProductDetail = ({ product }: Props) => {
+export const ProductDetail = ({ product, collectionName }: Props) => {
   const { addItem } = useCartStore()
   const inStock = isInStock(product)
   const allImages = useMemo(() => product.images, [product.images])
@@ -40,7 +41,7 @@ export const ProductDetail = ({ product }: Props) => {
     <div className="space-y-10 lg:grid lg:grid-cols-[1.2fr_0.8fr] lg:gap-10 lg:space-y-0">
       <div className="space-y-5">
         {selectedImage && (
-          <div className="relative aspect-square w-full overflow-hidden rounded-[24px] bg-not-quite-black">
+          <div className="relative aspect-square w-full overflow-hidden rounded-[24px] [background:var(--w-ph)]">
             <Image
               src={selectedImage}
               alt={product.name}
@@ -61,8 +62,8 @@ export const ProductDetail = ({ product }: Props) => {
                 className={cn(
                   "relative aspect-square overflow-hidden rounded-[16px] border transition",
                   img === selectedImage
-                    ? "border-blurple ring-2 ring-hover-blurple/40"
-                    : "border-transparent hover:border-dim-grey"
+                    ? "border-[var(--w-a)] ring-2 ring-[var(--w-a)]/40"
+                    : "border-transparent hover:border-current/40"
                 )}
               >
                 <Image
@@ -100,29 +101,29 @@ export const ProductDetail = ({ product }: Props) => {
 
       <div className="space-y-6">
         <div>
-          <p className="text-sm uppercase tracking-[0.3em] text-fog">Pixel3D</p>
-          <h1 className="mt-2 font-display text-4xl font-extrabold text-snow">
+          <p className="eyebrow text-[var(--w-muted)]">{collectionName ?? "Pixel3D"}</p>
+          <h1 className="mt-3 font-display text-[clamp(1.75rem,4vw,2.5rem)] leading-[1.05] font-bold tracking-[-0.02em] text-balance">
             {product.name}
           </h1>
           {product.description && (
-            <p className="mt-4 text-lg leading-relaxed text-fog">
+            <p className="mt-4 max-w-[60ch] text-lg leading-relaxed whitespace-pre-line text-[var(--w-muted)]">
               {product.description}
             </p>
           )}
         </div>
 
         <div>
-          <p className="text-sm text-greyple">Precio</p>
-          <p className="text-3xl font-extrabold text-snow">
+          <p className="text-sm text-[var(--w-muted)]">Precio</p>
+          <p className="text-3xl font-bold tabular-nums">
             {formatPrice(product.price)}
           </p>
         </div>
 
         <div>
-          <p className="text-sm text-greyple">Disponibilidad</p>
+          <p className="text-sm text-[var(--w-muted)]">Disponibilidad</p>
           <p
             className={
-              inStock ? "text-base font-medium text-spring-green" : "text-base font-medium text-ekko-red"
+              inStock ? "text-base font-medium text-spring-green" : "text-base font-medium text-[#ff6b8a]"
             }
           >
             {inStock
@@ -133,12 +134,12 @@ export const ProductDetail = ({ product }: Props) => {
 
         {inStock && (
           <div className="space-y-3">
-            <p className="text-sm text-greyple">Cantidad</p>
-            <div className="inline-flex items-center rounded-[12px] border border-dim-grey bg-not-quite-black px-2">
+            <p className="text-sm text-[var(--w-muted)]">Cantidad</p>
+            <div className="inline-flex items-center rounded-[12px] border border-current/25 bg-void/30 px-2">
               <button
                 type="button"
                 onClick={handleDecrement}
-                className="px-3 py-2 text-lg font-semibold text-snow hover:text-hover-blurple"
+                className="px-3 py-2 text-lg font-semibold hover:text-[var(--w-a)]"
                 aria-label="Disminuir cantidad"
               >
                 –
@@ -147,7 +148,7 @@ export const ProductDetail = ({ product }: Props) => {
               <button
                 type="button"
                 onClick={handleIncrement}
-                className="px-3 py-2 text-lg font-semibold text-snow hover:text-hover-blurple"
+                className="px-3 py-2 text-lg font-semibold hover:text-[var(--w-a)]"
                 aria-label="Aumentar cantidad"
               >
                 +
@@ -158,6 +159,7 @@ export const ProductDetail = ({ product }: Props) => {
 
         <Button
           size="lg"
+          variant="world"
           className="w-full"
           onClick={handleAddToCart}
           disabled={!inStock}

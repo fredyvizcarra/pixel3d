@@ -11,7 +11,7 @@ export default function NosotrosPage() {
     <div className="min-h-screen bg-cosmic text-snow">
       <section className="relative isolate overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_#3442d9_0%,_transparent_42%),linear-gradient(180deg,_#0e0f2d_0%,_#050614_100%)]" />
-        <div className="relative z-10 mx-auto flex max-w-[1200px] flex-col gap-10 px-6 pt-28 pb-16 sm:px-8 md:flex-row md:items-start md:gap-12 lg:px-8 lg:py-32">
+        <div className="relative z-10 mx-auto flex max-w-[1200px] flex-col gap-10 px-6 pt-16 pb-16 sm:px-8 md:flex-row md:items-start md:gap-12 lg:px-8 lg:py-24">
           <div className="max-w-lg space-y-6">
             <p className="text-sm font-medium uppercase tracking-[0.3em] text-fog">
               Sobre nosotros

@@ -13,6 +13,14 @@ export const categories = pgTable("categories", {
   name: text("name").notNull(),
   slug: text("slug").notNull().unique(),
   sortOrder: integer("sort_order").notNull().default(0),
+  /** Frase corta que aparece en la tarjeta y portada de la colección */
+  tagline: text("tagline"),
+  /** Tema visual: "default" | "gameday" | "navidad" | "magico" (ver lib/collection-themes) */
+  theme: text("theme").notNull().default("default"),
+  /** Color de acento (#rrggbb) para colecciones con tema "default" */
+  accentColor: text("accent_color"),
+  /** Si aparece como "mundo" destacado en el inicio */
+  featured: boolean("featured").notNull().default(false),
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
     .defaultNow(),

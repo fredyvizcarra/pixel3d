@@ -1,34 +1,72 @@
+import { HomeHero } from "@/components/home/home-hero"
+import { CustomOrderSteps } from "@/components/home/custom-order-steps"
+import { CollectionGrid } from "@/components/collections/collection-grid"
 import { ProductList } from "@/components/product-list"
-import { CatalogHero } from "@/components/catalog-hero"
-import { getActiveProducts, getStorefrontCategories } from "@/lib/products"
+import { SectionHead } from "@/components/section-head"
+import { getActiveProducts, getCollectionsWithCounts } from "@/lib/products"
 
 export const dynamic = "force-dynamic"
 
 export default async function Home() {
-  const [products, categories] = await Promise.all([
+  const [products, collections] = await Promise.all([
     getActiveProducts(),
-    getStorefrontCategories(),
+    getCollectionsWithCounts(),
   ])
 
+  const filterCollections = collections.filter(
+    (collection) => collection.productCount > 0
+  )
+
   return (
-    <div className="min-h-screen bg-cosmic">
-      <CatalogHero
-        kicker="Tienda"
-        title="Catálogo Pixel3D"
-        description="Piezas de impresión 3D listas para comprar. Figuras, accesorios y más."
-      />
-      <div className="py-12">
+    <>
+      <HomeHero />
+
+      <section
+        id="colecciones"
+        aria-labelledby="colecciones-title"
+        className="mx-auto max-w-[1200px] scroll-mt-20 px-4 py-16 sm:px-6 md:py-20"
+      >
+        <SectionHead
+          id="colecciones-title"
+          title="Elige tu mundo"
+          description="Cada colección tiene su propio ambiente. Encuentra la pieza perfecta para ti o para regalar."
+        />
+        <CollectionGrid collections={collections} />
+      </section>
+
+      <section
+        id="catalogo"
+        aria-labelledby="catalogo-title"
+        className="mx-auto max-w-[1200px] scroll-mt-20 px-4 pb-16 sm:px-6 md:pb-20"
+      >
+        <SectionHead
+          id="catalogo-title"
+          title="Todo el catálogo"
+          description="Filtra por colección, busca por nombre u ordena por precio."
+        />
         {products.length === 0 ? (
-          <div className="py-16 text-center">
-            <p className="text-lg text-fog">
-              No pudimos cargar el catálogo. Revisa que el proyecto de Supabase
-              esté activo y que DATABASE_URL esté bien en .env.
-            </p>
-          </div>
+          <p className="py-12 text-center text-lg text-fog">
+            Estamos preparando el catálogo. Vuelve pronto.
+          </p>
         ) : (
-          <ProductList products={products} categories={categories} />
+          <ProductList products={products} categories={filterCollections} />
         )}
-      </div>
-    </div>
+      </section>
+
+      <section
+        id="personalizados"
+        aria-labelledby="personalizados-title"
+        className="scroll-mt-20 border-t border-line bg-panel/40"
+      >
+        <div className="mx-auto max-w-[1200px] px-4 py-16 sm:px-6 md:py-20">
+          <SectionHead
+            id="personalizados-title"
+            title="Tu pieza personalizada"
+            description="¿No está en el catálogo? La diseñamos contigo."
+          />
+          <CustomOrderSteps />
+        </div>
+      </section>
+    </>
   )
 }
