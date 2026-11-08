@@ -33,7 +33,7 @@ export const CustomOrderSteps = () => {
                 : "flex flex-col gap-2 border-t-2 border-line pt-4"
             }
           >
-            <span className="font-mono text-xs font-semibold text-blurple">
+            <span className="font-mono text-xs font-semibold text-hover-blurple">
               Paso {index + 1}
             </span>
             <h3 className="font-display text-base font-bold tracking-[-0.01em]">

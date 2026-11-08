@@ -45,10 +45,10 @@ const clamp01 = (v: number) => (v < 0 ? 0 : v > 1 ? 1 : v)
 
 const readAccent = (): Vec3 => {
   const value = getComputedStyle(document.documentElement)
-    .getPropertyValue("--primary")
+    .getPropertyValue("--brand-voxel")
     .trim()
   const match = /^#?([0-9a-f]{6})$/i.exec(value)
-  if (!match) return [88, 101, 242]
+  if (!match) return [126, 63, 179]
   const n = parseInt(match[1], 16)
   return [(n >> 16) & 255, (n >> 8) & 255, n & 255]
 }

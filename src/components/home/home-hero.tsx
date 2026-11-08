@@ -26,7 +26,7 @@ export const HomeHero = () => {
           <h1 className="mt-4 font-display text-[clamp(2.25rem,6vw,4.25rem)] leading-[0.98] font-black tracking-[-0.03em] text-balance uppercase">
             Lo imaginas.
             <br />
-            Lo imprimimos <span className="text-blurple">capa por capa.</span>
+            Lo imprimimos <span className="text-hover-blurple">capa por capa.</span>
           </h1>
           <p className="mt-5 max-w-[46ch] text-lg text-fog">
             Piezas para tu equipo, tu árbol de Navidad y tu rincón mágico.

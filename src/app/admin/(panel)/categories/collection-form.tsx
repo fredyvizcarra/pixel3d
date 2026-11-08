@@ -19,7 +19,7 @@ const SubmitButton = ({ isEditing }: { isEditing: boolean }) => {
     <button
       type="submit"
       disabled={pending}
-      className="rounded-full bg-[#5865f2] px-5 py-2 text-sm font-semibold text-white hover:bg-[#3442d9] disabled:opacity-60"
+      className="rounded-full bg-[#662d91] px-5 py-2 text-sm font-semibold text-white hover:bg-[#522474] disabled:opacity-60"
     >
       {pending ? "Guardando..." : isEditing ? "Guardar" : "Crear colección"}
     </button>
@@ -30,7 +30,7 @@ export const CollectionForm = ({ collection }: Props) => {
   const isEditing = Boolean(collection)
   const idPrefix = collection?.id ?? "new"
   const [theme, setTheme] = useState(resolveTheme(collection?.theme))
-  const [accent, setAccent] = useState(collection?.accentColor ?? "#5865f2")
+  const [accent, setAccent] = useState(collection?.accentColor ?? "#662d91")
 
   return (
     <form action={saveCategory} className="grid gap-4">
@@ -118,7 +118,7 @@ export const CollectionForm = ({ collection }: Props) => {
             name="featured"
             type="checkbox"
             defaultChecked={collection?.featured ?? true}
-            className="size-4 accent-[#5865f2]"
+            className="size-4 accent-[#662d91]"
           />
           Mostrar como mundo destacado en el inicio
         </label>

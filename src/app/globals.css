@@ -10,20 +10,20 @@
   --card-foreground: #ffffff;
   --popover: #141828;
   --popover-foreground: #ffffff;
-  --primary: #5865f2;
+  --primary: #662d91;
   --primary-foreground: #ffffff;
   --secondary: #ffffff;
   --secondary-foreground: #23272a;
   --muted: #141828;
   --muted-foreground: #9aa0bd;
-  --accent: #3442d9;
+  --accent: #522474;
   --accent-foreground: #ffffff;
   --destructive: #de2761;
   --destructive-foreground: #ffffff;
   --border: #262b40;
   --input: #2c3250;
-  --ring: #8891f2;
-  --chart-1: #5865f2;
+  --ring: #a066d3;
+  --chart-1: #662d91;
   --chart-2: #57f287;
   --chart-3: #00b0f4;
   --chart-4: #fda220;
@@ -31,12 +31,12 @@
   --radius: 0.75rem;
   --sidebar: #141828;
   --sidebar-foreground: #ffffff;
-  --sidebar-primary: #5865f2;
+  --sidebar-primary: #662d91;
   --sidebar-primary-foreground: #ffffff;
   --sidebar-accent: #1a1f33;
   --sidebar-accent-foreground: #ffffff;
   --sidebar-border: #262b40;
-  --sidebar-ring: #8891f2;
+  --sidebar-ring: #a066d3;
 }
 
 @theme inline {
@@ -82,9 +82,9 @@
 }
 
 @theme {
-  --color-blurple: #5865f2;
-  --color-dark-blurple: #3442d9;
-  --color-hover-blurple: #8891f2;
+  --color-blurple: #662d91;
+  --color-dark-blurple: #522474;
+  --color-hover-blurple: #a066d3;
   --color-spring-green: #57f287;
   --color-fuchsia: #eb459e;
   --color-vivid-cerulean: #00b0f4;
@@ -136,6 +136,10 @@
 :root {
   /* Tokens de "mundo" por defecto (se sobrescriben en cada colección) */
   --w-a: var(--color-blurple);
+  /* Morado claro para texto sobre fondo oscuro (el #662d91 tiene poco contraste como texto) */
+  --brand-text: #a066d3;
+  /* Tono para los voxels de la portada: un poco más claro que el logo para que el sombreado se vea */
+  --brand-voxel: #7e3fb3;
   --w-a-text: #ffffff;
   --w-text: var(--color-snow);
   --w-muted: var(--color-fog);
