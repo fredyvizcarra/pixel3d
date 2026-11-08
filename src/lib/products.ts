@@ -1,4 +1,4 @@
-import { and, asc, count, eq } from "drizzle-orm"
+import { and, asc, count, desc, eq, ne } from "drizzle-orm"
 import { getDb } from "@/db"
 import { categories, products, type Category, type Product } from "@/db/schema"
 
@@ -105,4 +105,30 @@ export const getActiveProductsByCategory = async (
     .from(products)
     .where(and(eq(products.active, true), eq(products.categoryId, categoryId)))
     .orderBy(products.name)
+}
+
+/** Otros productos activos de la misma colección (para "Más de esta colección") */
+export const getRelatedProducts = async (
+  product: Pick<Product, "id" | "categoryId">,
+  limit = 4
+): Promise<Product[]> => {
+  if (!product.categoryId) return []
+  try {
+    const db = getDb()
+    return await db
+      .select()
+      .from(products)
+      .where(
+        and(
+          eq(products.active, true),
+          eq(products.categoryId, product.categoryId),
+          ne(products.id, product.id)
+        )
+      )
+      .orderBy(desc(products.createdAt))
+      .limit(limit)
+  } catch (error) {
+    console.error("No se pudieron cargar productos relacionados", error)
+    return []
+  }
 }

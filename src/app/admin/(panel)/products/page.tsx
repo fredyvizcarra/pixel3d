@@ -5,6 +5,8 @@ import { AdminProductTable } from "./admin-product-table"
 
 export const dynamic = "force-dynamic"
 
+const LOW_STOCK = 3
+
 export default async function AdminProductsPage({
   searchParams,
 }: {
@@ -13,38 +15,73 @@ export default async function AdminProductsPage({
   const { imported } = await searchParams
   const items = await getAllProducts()
 
+  const stats = [
+    { label: "Productos", value: items.length },
+    { label: "Visibles", value: items.filter((p) => p.active).length },
+    {
+      label: "Poco stock",
+      value: items.filter((p) => p.active && p.stock < LOW_STOCK).length,
+      warn: true,
+    },
+    {
+      label: "Sin foto",
+      value: items.filter((p) => p.images.length === 0).length,
+      warn: true,
+    },
+  ]
+
   return (
-    <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-4">
+    <div className="space-y-8">
+      <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-semibold text-slate-900">Productos</h1>
-          <p className="mt-1 text-slate-500">
-            Edita fotos, precio, stock y colección. Los cambios se ven en el
-            catálogo.
-          </p>
+          <p className="eyebrow">Catálogo</p>
+          <h1 className="admin-h1 mt-2">Productos</h1>
         </div>
-        <div className="flex gap-3">
-          <Button asChild variant="outline" className="rounded-full border-slate-300 text-slate-800 hover:bg-white">
+        <div className="flex flex-wrap gap-2">
+          <Button asChild variant="outline" size="sm">
             <Link href="/admin/products/import">Importar CSV</Link>
           </Button>
-          <Button asChild className="rounded-full bg-[#662d91] text-white hover:bg-purple-700">
-            <Link href="/admin/products/new">Nuevo producto</Link>
+          <Button asChild size="sm">
+            <Link href="/admin/products/new">+ Nuevo producto</Link>
           </Button>
         </div>
       </div>
 
+      <dl className="grid grid-cols-2 gap-3 md:grid-cols-4">
+        {stats.map((stat) => (
+          <div key={stat.label} className="rounded-[16px] border border-line bg-panel px-4 py-3.5">
+            <dt className="font-mono text-[11px] tracking-[0.12em] text-fog uppercase">
+              {stat.label}
+            </dt>
+            <dd
+              className={
+                stat.warn && stat.value > 0
+                  ? "mt-1 font-display text-2xl font-bold text-ember-orange tabular-nums"
+                  : "mt-1 font-display text-2xl font-bold tabular-nums"
+              }
+            >
+              {stat.value}
+            </dd>
+          </div>
+        ))}
+      </dl>
+
       {imported && (
-        <p className="rounded-xl bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+        <p className="rounded-[12px] border border-spring-green/30 bg-spring-green/10 px-4 py-3 text-sm text-spring-green">
           Se importaron {imported} productos.
         </p>
       )}
 
       {items.length === 0 ? (
-        <div className="rounded-3xl border border-dashed border-slate-300 bg-white p-12 text-center text-slate-500">
-          Aún no hay productos. Crea uno o importa un CSV.
+        <div className="rounded-[20px] border border-dashed border-line p-12 text-center">
+          <p className="text-lg">Aún no hay productos.</p>
+          <p className="mt-1 text-fog">Crea el primero o importa un CSV.</p>
+          <Button asChild className="mt-5">
+            <Link href="/admin/products/new">+ Nuevo producto</Link>
+          </Button>
         </div>
       ) : (
-        <AdminProductTable products={items} />
+        <AdminProductTable products={items} lowStock={LOW_STOCK} />
       )}
     </div>
   )

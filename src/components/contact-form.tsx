@@ -5,9 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
-import { Heading } from "@/components/ui/heading"
 import { whatsappUrl as buildWhatsappUrl } from "@/lib/contact"
-
 
 export const ContactForm = () => {
   const [formData, setFormData] = useState({
@@ -32,13 +30,13 @@ export const ContactForm = () => {
   }
 
   return (
-    <div className="flex-1 space-y-6 rounded-[24px] bg-dark-charcoal p-8">
-      <Heading as="h3" size="sm">
-        ¿Listo para comenzar?
-      </Heading>
-      <p className="text-sm leading-relaxed text-fog">
-        Envíanos un mensaje y te respondemos el mismo día hábil.
-      </p>
+    <div className="space-y-5 rounded-[20px] border border-line bg-panel p-6 sm:p-8">
+      <div>
+        <h3 className="font-display text-xl font-bold">Mándanos un mensaje</h3>
+        <p className="mt-1.5 text-sm text-fog">
+          Se abre WhatsApp con tu mensaje listo para enviar.
+        </p>
+      </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-2">
@@ -61,8 +59,9 @@ export const ContactForm = () => {
             value={formData.message}
             onChange={handleChange}
             required
-            placeholder="Cuéntanos sobre tu proyecto..."
+            placeholder="Ej. Quiero 20 llaveros con el logo de mi equipo"
             aria-label="Mensaje"
+            rows={5}
           />
         </div>
         <Button type="submit" size="lg" className="w-full">

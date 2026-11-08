@@ -136,6 +136,8 @@
 :root {
   /* Tokens de "mundo" por defecto (se sobrescriben en cada colección) */
   --w-a: var(--color-blurple);
+  /* Acento usado como TEXTO: versión aclarada para que se lea sobre fondo oscuro */
+  --w-a-ink: color-mix(in oklab, var(--w-a) 62%, white);
   /* Morado claro para texto sobre fondo oscuro (el #662d91 tiene poco contraste como texto) */
   --brand-text: #a066d3;
   /* Tono para los voxels de la portada: un poco más claro que el logo para que el sombreado se vea */
@@ -179,7 +181,7 @@
   }
 
   .world-title .hl {
-    color: var(--w-a);
+    color: var(--w-a-ink);
   }
 }
 
@@ -187,6 +189,8 @@
    Mundos (temas de colección)
    ------------------------------------------------------------------ */
 .world {
+  /* Se recalcula dentro de cada mundo (si no, heredaría el del :root) */
+  --w-a-ink: color-mix(in oklab, var(--w-a) 62%, white);
   color: var(--w-text);
   position: relative;
   isolation: isolate;
@@ -202,6 +206,7 @@
 
 .world-gameday {
   --w-a: #e8333f;
+  --w-a-ink: var(--w-a);
   --w-b: #1f4fd1;
   --w-text: #f4f6f2;
   --w-muted: #b9c9bd;
@@ -221,6 +226,7 @@
 
 .world-navidad {
   --w-a: #e6b655;
+  --w-a-ink: var(--w-a);
   --w-b: #c8303c;
   --w-a-text: #1d2a22;
   --w-text: #f6f0e2;
@@ -243,6 +249,7 @@
 
 .world-magico {
   --w-a: #d9b25f;
+  --w-a-ink: var(--w-a);
   --w-b: #7a2b4a;
   --w-a-text: #1b0f2c;
   --w-text: #efe6f7;
@@ -268,5 +275,30 @@
   *::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+/* ------------------------------------------------------------------
+   Panel de admin
+   ------------------------------------------------------------------ */
+@layer components {
+  .admin-card {
+    @apply rounded-[20px] border border-line bg-panel p-5 sm:p-6;
+  }
+
+  .admin-label {
+    @apply grid gap-1.5 text-sm font-medium text-snow;
+  }
+
+  .admin-hint {
+    @apply text-xs font-normal text-fog;
+  }
+
+  .admin-input {
+    @apply w-full rounded-[12px] border border-dim-grey bg-cosmic px-3.5 py-2.5 text-sm text-snow outline-none transition placeholder:text-greyple focus:border-blurple focus:ring-2 focus:ring-blurple/40;
+  }
+
+  .admin-h1 {
+    @apply font-display text-[clamp(1.5rem,3vw,2rem)] leading-tight font-bold tracking-[-0.02em];
   }
 }

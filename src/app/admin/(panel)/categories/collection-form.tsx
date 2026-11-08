@@ -10,8 +10,7 @@ interface Props {
   collection?: Category & { productCount?: number }
 }
 
-const inputClass =
-  "w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20"
+const inputClass = "admin-input"
 
 const SubmitButton = ({ isEditing }: { isEditing: boolean }) => {
   const { pending } = useFormStatus()
@@ -19,7 +18,7 @@ const SubmitButton = ({ isEditing }: { isEditing: boolean }) => {
     <button
       type="submit"
       disabled={pending}
-      className="rounded-full bg-[#662d91] px-5 py-2 text-sm font-semibold text-white hover:bg-[#522474] disabled:opacity-60"
+      className="rounded-[12px] bg-blurple px-5 py-2 text-sm font-semibold text-snow hover:bg-dark-blurple disabled:opacity-60"
     >
       {pending ? "Guardando..." : isEditing ? "Guardar" : "Crear colección"}
     </button>
@@ -37,7 +36,7 @@ export const CollectionForm = ({ collection }: Props) => {
       {collection && <input type="hidden" name="id" value={collection.id} />}
 
       <div className="grid gap-4 sm:grid-cols-[2fr_1fr]">
-        <label className="grid gap-1.5 text-sm font-medium text-slate-700" htmlFor={`${idPrefix}-name`}>
+        <label className="admin-label" htmlFor={`${idPrefix}-name`}>
           Nombre
           <input
             id={`${idPrefix}-name`}
@@ -48,7 +47,7 @@ export const CollectionForm = ({ collection }: Props) => {
             className={inputClass}
           />
         </label>
-        <label className="grid gap-1.5 text-sm font-medium text-slate-700" htmlFor={`${idPrefix}-sort`}>
+        <label className="admin-label" htmlFor={`${idPrefix}-sort`}>
           Orden
           <input
             id={`${idPrefix}-sort`}
@@ -60,7 +59,7 @@ export const CollectionForm = ({ collection }: Props) => {
         </label>
       </div>
 
-      <label className="grid gap-1.5 text-sm font-medium text-slate-700" htmlFor={`${idPrefix}-tagline`}>
+      <label className="admin-label" htmlFor={`${idPrefix}-tagline`}>
         Frase corta
         <input
           id={`${idPrefix}-tagline`}
@@ -73,7 +72,7 @@ export const CollectionForm = ({ collection }: Props) => {
       </label>
 
       <div className="grid gap-4 sm:grid-cols-[2fr_1fr]">
-        <label className="grid gap-1.5 text-sm font-medium text-slate-700" htmlFor={`${idPrefix}-theme`}>
+        <label className="admin-label" htmlFor={`${idPrefix}-theme`}>
           Tema visual
           <select
             id={`${idPrefix}-theme`}
@@ -88,13 +87,13 @@ export const CollectionForm = ({ collection }: Props) => {
               </option>
             ))}
           </select>
-          <span className="text-xs font-normal text-slate-500">
+          <span className="admin-hint">
             {COLLECTION_THEMES.find((option) => option.key === theme)?.description}
           </span>
         </label>
 
         {theme === "default" && (
-          <label className="grid gap-1.5 text-sm font-medium text-slate-700" htmlFor={`${idPrefix}-accent`}>
+          <label className="admin-label" htmlFor={`${idPrefix}-accent`}>
             Color de acento
             <span className="flex items-center gap-2">
               <input
@@ -103,16 +102,16 @@ export const CollectionForm = ({ collection }: Props) => {
                 type="color"
                 value={accent}
                 onChange={(event) => setAccent(event.target.value)}
-                className="h-10 w-14 cursor-pointer rounded-lg border border-slate-200 bg-white p-1"
+                className="h-10 w-14 cursor-pointer rounded-[10px] border border-dim-grey bg-cosmic p-1"
               />
-              <span className="font-mono text-xs text-slate-500">{accent}</span>
+              <span className="font-mono text-xs text-fog">{accent}</span>
             </span>
           </label>
         )}
       </div>
 
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <label className="flex items-center gap-2 text-sm text-slate-700" htmlFor={`${idPrefix}-featured`}>
+        <label className="flex items-center gap-2 text-sm" htmlFor={`${idPrefix}-featured`}>
           <input
             id={`${idPrefix}-featured`}
             name="featured"

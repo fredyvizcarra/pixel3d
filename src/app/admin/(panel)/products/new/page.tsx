@@ -1,3 +1,4 @@
+import Link from "next/link"
 import { getAllCategories } from "@/lib/admin-data"
 import { hasSupabaseStorage } from "@/lib/supabase-admin"
 import { ProductForm } from "../product-form"
@@ -10,10 +11,10 @@ export default async function NewProductPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-semibold text-slate-900">Nuevo producto</h1>
-        <p className="mt-1 text-slate-500">
-          Completa los datos. El slug se genera automáticamente.
-        </p>
+        <Link href="/admin/products" className="font-mono text-xs text-fog hover:text-snow">
+          ← Productos
+        </Link>
+        <h1 className="admin-h1 mt-2">Nuevo producto</h1>
       </div>
       <ProductForm
         categories={categories}

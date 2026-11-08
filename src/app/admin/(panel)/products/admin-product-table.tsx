@@ -3,148 +3,179 @@
 import { useMemo, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
+import { MagnifyingGlassIcon, PhotoIcon } from "@heroicons/react/24/outline"
 import type { AdminProduct } from "@/lib/admin-data"
 import { formatPrice } from "@/lib/product-utils"
+import { cn } from "@/lib/utils"
 import { toggleProductActive } from "./actions"
 
 interface Props {
   products: AdminProduct[]
+  lowStock: number
 }
 
-export const AdminProductTable = ({ products }: Props) => {
-  const [searchTerm, setSearchTerm] = useState("")
+type Filter = "all" | "visible" | "hidden" | "attention"
 
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value)
-  }
+const FILTERS: { key: Filter; label: string }[] = [
+  { key: "all", label: "Todos" },
+  { key: "visible", label: "Visibles" },
+  { key: "hidden", label: "Ocultos" },
+  { key: "attention", label: "Requieren atención" },
+]
+
+export const AdminProductTable = ({ products, lowStock }: Props) => {
+  const [searchTerm, setSearchTerm] = useState("")
+  const [filter, setFilter] = useState<Filter>("all")
 
   const filteredProducts = useMemo(() => {
+    const needsAttention = (product: AdminProduct) =>
+      product.images.length === 0 || (product.active && product.stock < lowStock)
     const term = searchTerm.trim().toLowerCase()
-    if (!term) return products
     return products.filter((product) => {
+      if (filter === "visible" && !product.active) return false
+      if (filter === "hidden" && product.active) return false
+      if (filter === "attention" && !needsAttention(product)) return false
+      if (!term) return true
       return (
         product.name.toLowerCase().includes(term) ||
         product.slug.toLowerCase().includes(term) ||
-        (product.categoryName
-          ? product.categoryName.toLowerCase().includes(term)
-          : false)
+        (product.categoryName?.toLowerCase().includes(term) ?? false)
       )
     })
-  }, [products, searchTerm])
+  }, [products, searchTerm, filter, lowStock])
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-sm text-slate-500">
-          {filteredProducts.length} de {products.length} productos
-        </p>
-        <input
-          type="search"
-          value={searchTerm}
-          onChange={handleSearchChange}
-          placeholder="Buscar en el panel..."
-          aria-label="Buscar productos en el panel"
-          className="h-10 w-full max-w-xs rounded-xl border border-slate-200 bg-white px-4 text-sm text-slate-900 outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20"
-        />
+      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+        <div className="flex flex-wrap gap-1.5" role="group" aria-label="Filtrar productos">
+          {FILTERS.map((option) => (
+            <button
+              key={option.key}
+              type="button"
+              onClick={() => setFilter(option.key)}
+              aria-pressed={filter === option.key}
+              className={cn(
+                "rounded-full border px-3 py-1.5 text-sm font-medium transition-colors",
+                filter === option.key
+                  ? "border-blurple bg-blurple text-snow"
+                  : "border-line text-fog hover:border-fog hover:text-snow"
+              )}
+            >
+              {option.label}
+            </button>
+          ))}
+        </div>
+        <div className="relative w-full md:max-w-xs">
+          <MagnifyingGlassIcon className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-greyple" />
+          <input
+            id="admin-product-search"
+            type="search"
+            value={searchTerm}
+            onChange={(event) => setSearchTerm(event.target.value)}
+            placeholder="Buscar por nombre o colección"
+            aria-label="Buscar productos"
+            className="admin-input pl-9"
+          />
+        </div>
       </div>
 
+      <p className="font-mono text-xs text-fog">
+        {filteredProducts.length} de {products.length} productos
+      </p>
+
       {filteredProducts.length === 0 ? (
-        <div className="rounded-3xl border border-dashed border-slate-300 bg-white p-12 text-center text-slate-500">
-          No hay productos con esa búsqueda.
+        <div className="rounded-[20px] border border-dashed border-line p-12 text-center text-fog">
+          No hay productos con ese filtro.
         </div>
       ) : (
-        <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
-          <table className="w-full text-left text-sm">
-            <thead className="bg-slate-50 text-slate-500">
-              <tr>
-                <th className="px-4 py-3 font-medium">Producto</th>
-                <th className="px-4 py-3 font-medium">Colección</th>
-                <th className="px-4 py-3 font-medium">Precio</th>
-                <th className="px-4 py-3 font-medium">Stock</th>
-                <th className="px-4 py-3 font-medium">Fotos</th>
-                <th className="px-4 py-3 font-medium">Estado</th>
-                <th className="px-4 py-3 font-medium">Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredProducts.map((product) => (
-                <tr key={product.id} className="border-t border-slate-100">
-                  <td className="px-4 py-3">
-                    <div className="flex items-center gap-3">
-                      <div className="relative h-12 w-12 overflow-hidden rounded-xl bg-slate-100">
-                        {product.images[0] ? (
-                          <Image
-                            src={product.images[0]}
-                            alt={product.name}
-                            fill
-                            className="object-cover"
-                            unoptimized
-                          />
-                        ) : null}
-                      </div>
-                      <div>
-                        <p className="font-medium text-slate-900">
-                          {product.name}
-                        </p>
-                        <p className="text-xs text-slate-400">{product.slug}</p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-4 py-3 text-slate-600">
-                    {product.categoryName ?? "—"}
-                  </td>
-                  <td className="px-4 py-3 font-medium text-slate-900">
-                    {formatPrice(product.price)}
-                  </td>
-                  <td className="px-4 py-3">
-                    <span
-                      className={
-                        product.stock < 3
-                          ? "font-medium text-amber-700"
-                          : "text-slate-700"
-                      }
-                    >
-                      {product.stock}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 text-slate-600">
-                    {product.images.length}
-                  </td>
-                  <td className="px-4 py-3">
-                    <span
-                      className={
+        <ul className="divide-y divide-line overflow-hidden rounded-[20px] border border-line bg-panel">
+          {filteredProducts.map((product) => {
+            const low = product.active && product.stock < lowStock
+            return (
+              <li
+                key={product.id}
+                className="grid grid-cols-[56px_1fr_auto] items-center gap-x-4 gap-y-2 px-4 py-3 md:grid-cols-[56px_1.6fr_1fr_0.7fr_0.6fr_auto]"
+              >
+                <Link
+                  href={`/admin/products/${product.id}`}
+                  className="relative size-14 overflow-hidden rounded-[10px] bg-dark-charcoal"
+                  tabIndex={-1}
+                  aria-hidden="true"
+                >
+                  {product.images[0] ? (
+                    <Image
+                      src={product.images[0]}
+                      alt=""
+                      fill
+                      sizes="56px"
+                      unoptimized
+                      className="object-cover"
+                    />
+                  ) : (
+                    <PhotoIcon className="absolute inset-0 m-auto size-5 text-ember-orange" />
+                  )}
+                </Link>
+
+                <div className="min-w-0">
+                  <Link
+                    href={`/admin/products/${product.id}`}
+                    className="block truncate font-semibold hover:text-hover-blurple"
+                  >
+                    {product.name}
+                  </Link>
+                  <p className="truncate font-mono text-xs text-fog md:hidden">
+                    {formatPrice(product.price)} · stock {product.stock}
+                    {product.categoryName ? ` · ${product.categoryName}` : ""}
+                  </p>
+                  <p className="hidden truncate font-mono text-xs text-greyple md:block">
+                    /{product.slug}
+                  </p>
+                </div>
+
+                <p className="hidden truncate text-sm text-fog md:block">
+                  {product.categoryName ?? "Sin colección"}
+                </p>
+
+                <p className="hidden font-semibold tabular-nums md:block">
+                  {formatPrice(product.price)}
+                </p>
+
+                <p
+                  className={cn(
+                    "hidden font-mono text-sm tabular-nums md:block",
+                    low ? "text-ember-orange" : "text-fog"
+                  )}
+                >
+                  {product.stock} pzs
+                </p>
+
+                <div className="flex items-center justify-end gap-2">
+                  <form action={toggleProductActive}>
+                    <input type="hidden" name="id" value={product.id} />
+                    <button
+                      type="submit"
+                      title={product.active ? "Ocultar de la tienda" : "Publicar en la tienda"}
+                      className={cn(
+                        "rounded-full px-2.5 py-1 text-xs font-semibold transition-colors",
                         product.active
-                          ? "rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700"
-                          : "rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-500"
-                      }
+                          ? "bg-spring-green/15 text-spring-green hover:bg-spring-green/25"
+                          : "bg-snow/10 text-fog hover:bg-snow/20"
+                      )}
                     >
                       {product.active ? "Visible" : "Oculto"}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3">
-                    <div className="flex items-center gap-2">
-                      <Link
-                        href={`/admin/products/${product.id}`}
-                        className="text-sm font-medium text-purple-700 hover:underline"
-                      >
-                        Editar
-                      </Link>
-                      <form action={toggleProductActive}>
-                        <input type="hidden" name="id" value={product.id} />
-                        <button
-                          type="submit"
-                          className="text-sm text-slate-500 hover:text-slate-800"
-                        >
-                          {product.active ? "Ocultar" : "Publicar"}
-                        </button>
-                      </form>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+                    </button>
+                  </form>
+                  <Link
+                    href={`/admin/products/${product.id}`}
+                    className="hidden rounded-[10px] border border-line px-3 py-1.5 text-sm font-medium transition-colors hover:border-fog sm:block"
+                  >
+                    Editar
+                  </Link>
+                </div>
+              </li>
+            )
+          })}
+        </ul>
       )}
     </div>
   )

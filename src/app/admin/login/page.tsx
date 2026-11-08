@@ -1,3 +1,4 @@
+import Image from "next/image"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import { Button } from "@/components/ui/button"
@@ -19,57 +20,55 @@ export default async function AdminLoginPage({
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-950 px-4">
-      <div className="w-full max-w-md rounded-3xl border border-white/10 bg-white p-8 shadow-2xl">
-        <p className="text-sm font-medium uppercase tracking-[0.3em] text-purple-600">
-          Pixel3D
-        </p>
-        <h1 className="mt-2 text-2xl font-semibold text-slate-900">
+    <div className="bg-blueprint flex min-h-screen items-center justify-center px-4 py-12">
+      <div className="w-full max-w-md rounded-[20px] border border-line bg-panel p-6 shadow-2xl sm:p-8">
+        <div className="flex items-center gap-2.5">
+          <Image src="/logo/p.png" width={28} height={28} alt="" className="size-7" />
+          <span className="font-mono text-xs tracking-[0.14em] text-fog uppercase">
+            Pixel3D · Admin
+          </span>
+        </div>
+        <h1 className="mt-5 font-display text-2xl font-bold tracking-[-0.02em]">
           Panel de administración
         </h1>
-        <p className="mt-2 text-sm text-slate-500">
+        <p className="mt-2 text-sm text-fog">
           Ingresa con el correo autorizado y la contraseña de admin.
         </p>
 
         {error && (
           <p
-            className="mt-4 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700"
+            className="mt-5 rounded-[12px] border border-[#ff6b8a]/40 bg-[#ff6b8a]/10 px-4 py-3 text-sm text-[#ffb3c2]"
             role="alert"
           >
             {error}
           </p>
         )}
 
-        <form action={loginAdmin} className="mt-6 space-y-4">
+        <form action={loginAdmin} className="mt-6 grid gap-4">
           <input type="hidden" name="from" value={from ?? "/admin/products"} />
-          <label className="block space-y-1.5">
-            <span className="text-sm font-medium text-slate-700">Correo</span>
+          <label className="admin-label" htmlFor="admin-email">
+            Correo
             <input
+              id="admin-email"
               type="email"
               name="email"
               required
               autoComplete="username"
-              aria-label="Correo de administrador"
-              className="w-full rounded-xl border border-slate-200 px-4 py-3 text-slate-900 outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20"
+              className="admin-input"
             />
           </label>
-          <label className="block space-y-1.5">
-            <span className="text-sm font-medium text-slate-700">
-              Contraseña
-            </span>
+          <label className="admin-label" htmlFor="admin-password">
+            Contraseña
             <input
+              id="admin-password"
               type="password"
               name="password"
               required
               autoComplete="current-password"
-              aria-label="Contraseña de administrador"
-              className="w-full rounded-xl border border-slate-200 px-4 py-3 text-slate-900 outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20"
+              className="admin-input"
             />
           </label>
-          <Button
-            type="submit"
-            className="w-full rounded-full bg-[#662d91] py-6 text-base hover:bg-purple-700"
-          >
+          <Button type="submit" size="lg" className="mt-2 w-full">
             Entrar
           </Button>
         </form>

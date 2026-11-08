@@ -3,12 +3,14 @@ import path from "path"
 
 const nextConfig: NextConfig = {
   outputFileTracingRoot: path.join(__dirname),
+  experimental: {
+    serverActions: {
+      // Las fotos se comprimen en el navegador; Vercel corta en 4.5 MB por petición
+      bodySizeLimit: "4mb",
+    },
+  },
   images: {
     remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "files.stripe.com",
-      },
       {
         protocol: "https",
         hostname: "lh3.googleusercontent.com",

@@ -1,182 +1,189 @@
+import type { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
-import { ScrollAnimate } from "@/components/scroll-animate"
 import { ContactForm } from "@/components/contact-form"
-import { HeroCard } from "@/components/hero-card"
+import { SectionHead } from "@/components/section-head"
 import { Button } from "@/components/ui/button"
-import { Heading } from "@/components/ui/heading"
+import { whatsappUrl } from "@/lib/contact"
+
+export const metadata: Metadata = {
+  title: "Nosotros · Pixel3D",
+  description:
+    "Pixel3D es un taller de impresión 3D en México. Imprimimos con equipos Bambu Lab y filamentos de marcas reconocidas.",
+}
+
+const FEATURES = [
+  {
+    title: "Precisión industrial",
+    body: "Tolerancias de ±0.1 mm en cada impresión.",
+  },
+  {
+    title: "Velocidad",
+    body: "Hasta 5 veces más rápido que equipos tradicionales.",
+  },
+  {
+    title: "Confiabilidad",
+    body: "Producción continua con calibración constante.",
+  },
+  {
+    title: "Multimaterial",
+    body: "PLA, PETG y más filamentos técnicos.",
+  },
+]
+
+const FILAMENT_LOGOS = ["/logo/1.png", "/logo/2.png", "/logo/3.png", "/logo/4.png"]
+
+const SOCIALS = [
+  { label: "WhatsApp", value: "Respuesta el mismo día hábil", href: whatsappUrl() },
+  { label: "Instagram", value: "@pixel3dmx", href: "https://www.instagram.com/pixel3dmx/" },
+  { label: "TikTok", value: "@pixel3d83", href: "https://www.tiktok.com/@pixel3d83" },
+]
 
 export default function NosotrosPage() {
   return (
-    <div className="min-h-screen bg-cosmic text-snow">
-      <section className="relative isolate overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_#3442d9_0%,_transparent_42%),linear-gradient(180deg,_#0e0f2d_0%,_#050614_100%)]" />
-        <div className="relative z-10 mx-auto flex max-w-[1200px] flex-col gap-10 px-6 pt-16 pb-16 sm:px-8 md:flex-row md:items-start md:gap-12 lg:px-8 lg:py-24">
-          <div className="max-w-lg space-y-6">
-            <p className="text-sm font-medium uppercase tracking-[0.3em] text-fog">
-              Sobre nosotros
+    <>
+      <section className="bg-blueprint border-b border-line">
+        <div className="mx-auto grid max-w-[1200px] items-center gap-12 px-4 py-16 sm:px-6 md:grid-cols-[1.15fr_0.85fr] md:py-20">
+          <div>
+            <p className="eyebrow">Sobre nosotros</p>
+            <h1 className="mt-4 font-display text-[clamp(2.25rem,5.5vw,4rem)] leading-[0.98] font-black tracking-[-0.03em] text-balance uppercase">
+              Un taller de impresión 3D{" "}
+              <span className="text-hover-blurple">hecho en México.</span>
+            </h1>
+            <p className="mt-5 max-w-[48ch] text-lg text-fog">
+              Convertimos ideas en piezas reales: colecciones listas para
+              comprar y proyectos a medida, impresos y revisados uno por uno.
             </p>
-            <Heading as="h1" size="display">
-              Fabricamos ideas con precisión industrial
-            </Heading>
-            <p className="max-w-[380px] text-base leading-relaxed text-fog">
-              Pixel3D es un taller de impresión 3D en México. Convertimos ideas
-              en piezas funcionales: catálogo listo para comprar o proyectos a
-              medida.
-            </p>
-            <div className="flex flex-wrap gap-4">
-              <Button asChild variant="secondary">
-                <Link href="#contacto">Hablar con nosotros</Link>
-              </Button>
+            <div className="mt-7 flex flex-wrap gap-3">
               <Button asChild size="lg">
-                <Link href="/">Ver catálogo</Link>
+                <Link href="#contacto">Escríbenos</Link>
+              </Button>
+              <Button asChild size="lg" variant="outline">
+                <Link href="/#colecciones">Ver colecciones</Link>
               </Button>
             </div>
           </div>
-          <div className="relative z-10 grid w-full gap-6 md:flex-1 lg:grid-cols-2">
-            <HeroCard
-              href="/"
-              imageSrc="/hero/psyche.jpg"
-              imageAlt="Fondo artístico del catálogo"
-              number="01"
-              title="Catálogo"
-              description="Revisa nuestro catálogo de productos y encuentra la pieza ideal para tus proyectos."
-              hoverTransform="scale(1.07) rotate(1.25deg)"
+
+          <div className="relative mx-auto w-full max-w-[460px]">
+            <div
+              className="absolute inset-[12%] rounded-full bg-blurple/40 blur-3xl"
+              aria-hidden="true"
             />
-            <HeroCard
-              href="#contacto"
-              imageSrc="/hero/polis.jpg"
-              imageAlt="Fondo artístico de contacto"
-              number="02"
-              title="Contacto"
-              description="¿Tienes dudas o un proyecto especial? Escríbenos y te ayudamos a encontrar la mejor solución."
-              hoverTransform="scale(1.06) translateX(-1.5%) translateY(-1%)"
-            />
-          </div>
-        </div>
-      </section>
-
-      <section className="px-6 py-20 sm:px-8 lg:py-28">
-        <div className="mx-auto max-w-[1200px]">
-          <div className="grid gap-12 lg:grid-cols-2 lg:items-center lg:gap-16">
-            <ScrollAnimate delay={0}>
-              <div className="space-y-8">
-                <Heading as="h2" size="md">
-                  Trabajamos con el top de impresoras del mercado
-                </Heading>
-                <p className="text-lg leading-relaxed text-fog">
-                  En Pixel3D utilizamos exclusivamente impresoras{" "}
-                  <span className="font-semibold text-snow">Bambu Lab</span>,
-                  reconocidas por su precisión, velocidad y confiabilidad.
-                </p>
-                <div className="grid gap-3 sm:grid-cols-2">
-                  {[
-                    [
-                      "Precisión industrial",
-                      "Tolerancias de ±0.1mm en cada impresión.",
-                    ],
-                    [
-                      "Velocidad superior",
-                      "Hasta 5x más rápido que equipos tradicionales.",
-                    ],
-                    [
-                      "Confiabilidad 24/7",
-                      "Producción continua con calibración constante.",
-                    ],
-                    [
-                      "Multi-material",
-                      "PLA, PETG y más filamentos técnicos.",
-                    ],
-                  ].map(([title, body]) => (
-                    <div
-                      key={title}
-                      className="rounded-[16px] bg-dark-charcoal p-6"
-                    >
-                      <h3 className="font-display text-base font-extrabold uppercase tracking-tight text-snow">
-                        {title}
-                      </h3>
-                      <p className="mt-2 text-sm leading-relaxed text-fog">
-                        {body}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </ScrollAnimate>
-
-            <ScrollAnimate delay={200}>
-              <div className="relative flex flex-col items-center">
-                <div className="mb-4 flex w-full justify-end">
-                  <Image
-                    src="/logo/bambulab-logo.png"
-                    alt="BambuLab"
-                    width={180}
-                    height={60}
-                    className="h-12 w-auto object-contain"
-                  />
-                </div>
-                <div className="relative w-full overflow-hidden rounded-[24px] bg-off-white p-4 sm:p-8">
-                  <Image
-                    src="/hero/x1.png"
-                    alt="BambuLab X1 Carbon"
-                    width={750}
-                    height={750}
-                    className="relative z-10 h-auto w-full object-contain"
-                    priority
-                  />
-                </div>
-              </div>
-            </ScrollAnimate>
-          </div>
-        </div>
-      </section>
-
-      <section className="px-6 py-8 sm:px-8">
-        <div className="mx-auto max-w-[1200px] rounded-[24px] bg-off-white px-8 py-16">
-          <ScrollAnimate delay={0}>
-            <div className="mb-12 space-y-4 text-center">
-              <p className="text-sm font-medium uppercase tracking-[0.3em] text-dim-grey">
-                Filamentos premium
-              </p>
-              <Heading as="h2" size="sm" className="text-void">
-                Las mejores marcas del mercado
-              </Heading>
-            </div>
-          </ScrollAnimate>
-          <ScrollAnimate delay={150}>
-            <div className="grid grid-cols-2 items-center justify-items-center gap-8 sm:grid-cols-4">
-              {["/logo/1.png", "/logo/2.png", "/logo/3.png", "/logo/4.png"].map(
-                (src) => (
-                  <Image
-                    key={src}
-                    src={src}
-                    alt="Marca de filamentos premium"
-                    width={150}
-                    height={80}
-                    className="h-20 w-auto object-contain sm:h-24"
-                  />
-                )
-              )}
-            </div>
-          </ScrollAnimate>
-        </div>
-      </section>
-
-      <section id="contacto" className="px-6 py-20 sm:px-8 lg:py-28">
-        <div className="mx-auto flex max-w-[1200px] flex-col gap-12 lg:flex-row lg:items-center">
-          <div className="flex-1">
+            {/* WebP animado convertido del GIF original (24 MB → 3.9 MB) */}
             <Image
-              src="/hero/purplegif.gif"
-              alt="Animación 3D Pixel3D"
-              width={600}
-              height={600}
-              className="h-auto w-full rounded-[24px]"
+              src="/hero/purple-shape.webp"
+              alt=""
+              width={560}
+              height={594}
               unoptimized
+              className="relative h-auto w-full"
             />
+          </div>
+        </div>
+      </section>
+
+      <section
+        aria-labelledby="equipo-title"
+        className="mx-auto max-w-[1200px] px-4 py-16 sm:px-6 md:py-20"
+      >
+        <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+          <div>
+            <SectionHead id="equipo-title" title="Imprimimos con Bambu Lab" />
+            <p className="-mt-2 max-w-[52ch] text-lg text-fog">
+              Usamos impresoras <span className="font-semibold text-snow">Bambu Lab</span>,
+              reconocidas por su precisión, velocidad y confiabilidad. Así cada
+              pieza sale con el mismo acabado, sea la primera o la número cien.
+            </p>
+            <ul className="mt-8 grid gap-x-8 sm:grid-cols-2">
+              {FEATURES.map((feature) => (
+                <li key={feature.title} className="border-t border-line py-4">
+                  <h3 className="font-display text-sm font-bold tracking-[-0.01em] uppercase">
+                    {feature.title}
+                  </h3>
+                  <p className="mt-1.5 text-[15px] text-fog">{feature.body}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <figure className="relative overflow-hidden rounded-[24px] bg-[#eef0f4] p-6 sm:p-10">
+            <Image
+              src="/logo/bambulab-logo.png"
+              alt="Bambu Lab"
+              width={140}
+              height={56}
+              className="absolute top-5 right-5 h-9 w-auto sm:h-10"
+            />
+            <Image
+              src="/hero/x1.png"
+              alt="Impresora Bambu Lab"
+              width={750}
+              height={750}
+              sizes="(max-width: 1024px) 100vw, 560px"
+              className="mx-auto h-auto w-full max-w-[460px]"
+            />
+          </figure>
+        </div>
+      </section>
+
+      <section aria-labelledby="filamentos-title" className="border-y border-line bg-panel/40">
+        <div className="mx-auto max-w-[1200px] px-4 py-14 sm:px-6">
+          <h2 id="filamentos-title" className="eyebrow text-center">
+            Filamentos de marcas reconocidas
+          </h2>
+          <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
+            {FILAMENT_LOGOS.map((src) => (
+              <div
+                key={src}
+                className="grid h-24 place-items-center rounded-[16px] bg-white px-6"
+              >
+                <Image
+                  src={src}
+                  alt="Marca de filamento"
+                  width={150}
+                  height={80}
+                  className="h-14 w-auto object-contain"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="contacto"
+        aria-labelledby="contacto-title"
+        className="mx-auto max-w-[1200px] scroll-mt-20 px-4 py-16 sm:px-6 md:py-20"
+      >
+        <div className="grid items-start gap-10 lg:grid-cols-2 lg:gap-16">
+          <div>
+            <SectionHead id="contacto-title" title="¿Tienes una idea?" />
+            <p className="-mt-2 max-w-[46ch] text-lg text-fog">
+              Cuéntanos qué quieres imprimir. Te respondemos con una cotización
+              y, si hace falta, un render para que apruebes antes de imprimir.
+            </p>
+            <ul className="mt-8">
+              {SOCIALS.map((social) => (
+                <li key={social.label} className="border-t border-line last:border-b">
+                  <a
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex items-center justify-between gap-4 py-4"
+                  >
+                    <span className="font-semibold">{social.label}</span>
+                    <span className="flex items-center gap-2 font-mono text-sm text-fog transition-colors group-hover:text-snow">
+                      {social.value}
+                      <span aria-hidden="true">↗</span>
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
           </div>
           <ContactForm />
         </div>
       </section>
-    </div>
+    </>
   )
 }

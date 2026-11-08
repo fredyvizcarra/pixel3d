@@ -16,7 +16,11 @@ export const getSupabaseAdmin = (): SupabaseClient => {
     )
   }
 
-  supabaseAdmin = createClient(url, serviceRoleKey, {
+  // Solo el origen (https://xxxx.supabase.co): si la variable trae "/rest/v1/"
+  // u otra ruta, Storage responde "Invalid path specified in request URL"
+  const projectUrl = new URL(url).origin
+
+  supabaseAdmin = createClient(projectUrl, serviceRoleKey, {
     auth: { persistSession: false, autoRefreshToken: false },
   })
   return supabaseAdmin
@@ -28,7 +32,7 @@ export const hasSupabaseStorage = (): boolean => {
   )
 }
 
-const ensureBucket = async (): Promise<void> => {
+export const ensureBucket = async (): Promise<void> => {
   const supabase = getSupabaseAdmin()
   const { data } = await supabase.storage.getBucket(PRODUCT_BUCKET)
 

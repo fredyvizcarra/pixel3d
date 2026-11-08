@@ -1,3 +1,4 @@
+import Link from "next/link"
 import { notFound } from "next/navigation"
 import { getAllCategories } from "@/lib/admin-data"
 import { getProductById } from "@/lib/products"
@@ -23,13 +24,22 @@ export default async function EditProductPage({
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-semibold text-slate-900">
-          Editar producto
-        </h1>
-        <p className="mt-1 text-slate-500">
-          {product.slug} · cambia fotos, precio, stock y visibilidad
-        </p>
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <Link href="/admin/products" className="font-mono text-xs text-fog hover:text-snow">
+            ← Productos
+          </Link>
+          <h1 className="admin-h1 mt-2">{product.name}</h1>
+        </div>
+        {product.active && (
+          <Link
+            href={`/products/${product.slug}`}
+            target="_blank"
+            className="text-sm font-medium text-hover-blurple hover:underline"
+          >
+            Ver en la tienda ↗
+          </Link>
+        )}
       </div>
       <ProductForm
         product={product}
