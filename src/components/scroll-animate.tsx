@@ -35,16 +35,24 @@ export const ScrollAnimate = ({
         });
       },
       {
-        threshold: 0.2,
-        rootMargin: "0px 0px -50px 0px",
+        threshold: 0.05,
+        rootMargin: "0px 0px 0px 0px",
       }
     );
 
     observer.observe(element);
 
+    const fallback = window.setTimeout(() => {
+      if (!hasAnimated.current) {
+        hasAnimated.current = true
+        setIsVisible(true)
+      }
+    }, 900)
+
     return () => {
-      observer.disconnect();
-    };
+      window.clearTimeout(fallback)
+      observer.disconnect()
+    }
   }, [delay]);
 
   return (

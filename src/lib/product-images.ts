@@ -1,19 +1,6 @@
 /**
- * Mapeo de imágenes locales para productos
- *
- * Estructura:
- * - Cada producto de Stripe tiene un ID único
- * - Las imágenes se guardan en /public/products/[product-id]/
- * - Agrega las rutas de las imágenes aquí
- *
- * Ejemplo de estructura de carpetas:
- * public/
- *   products/
- *     prod_TGKUeXrau7h5aW/
- *       img1.jpg
- *       img2.jpg
- *       img3.jpg
- *       img4.jpg
+ * Imágenes locales por ID legacy de Stripe.
+ * Usado por scripts/seed-from-stripe.ts durante la migración inicial.
  */
 
 export const productImagesMap: Record<string, string[]> = {
@@ -109,18 +96,3 @@ export const productImagesMap: Record<string, string[]> = {
   ],
 };
 
-/**
- * Obtiene todas las imágenes de un producto (Stripe + locales)
- */
-export function getProductImages(
-  productId: string,
-  stripeImages: string[] = []
-): string[] {
-  const localImages = productImagesMap[productId] ?? [];
-  // Combina imágenes de Stripe con imágenes locales
-  // Las locales tienen prioridad si hay duplicados
-  return [
-    ...localImages,
-    ...stripeImages.filter((img) => !localImages.includes(img)),
-  ];
-}

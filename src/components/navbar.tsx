@@ -1,176 +1,129 @@
-"use client";
+"use client"
 
-import Link from "next/link";
-import Image from "next/image";
-import { cn } from "@/lib/utils";
-import {
-  ShoppingCartIcon,
-  Bars3Icon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
-import { useCartStore } from "../../store/cart-store";
-import { useEffect, useState } from "react";
-import { Button } from "./ui/button";
+import Link from "next/link"
+import Image from "next/image"
+import { ShoppingCartIcon, Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline"
+import { useCartStore } from "../../store/cart-store"
+import { useEffect, useState } from "react"
+import { usePathname } from "next/navigation"
+import { Button } from "./ui/button"
+import { Badge } from "./ui/badge"
 
 export const Navbar = () => {
-  const [mobileOpen, setMobileOpen] = useState<boolean>(false);
-  const [isScrolled, setIsScrolled] = useState<boolean>(false);
-  const { items } = useCartStore();
-  const cartCount = items.reduce((acc, item) => acc + item.quantity, 0);
+  const pathname = usePathname()
+  const [mobileOpen, setMobileOpen] = useState<boolean>(false)
+  const [isScrolled, setIsScrolled] = useState<boolean>(false)
+  const { items } = useCartStore()
+  const cartCount = items.reduce((acc, item) => acc + item.quantity, 0)
 
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 768) {
-        setMobileOpen(false);
+        setMobileOpen(false)
       }
-    };
+    }
 
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 54);
-    };
+      setIsScrolled(window.scrollY > 54)
+    }
 
-    window.addEventListener("resize", handleResize);
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
+    window.addEventListener("resize", handleResize)
+    window.addEventListener("scroll", handleScroll, { passive: true })
+    handleScroll()
 
     return () => {
-      window.removeEventListener("resize", handleResize);
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+      window.removeEventListener("resize", handleResize)
+      window.removeEventListener("scroll", handleScroll)
+    }
+  }, [])
+
+  if (pathname?.startsWith("/admin")) {
+    return null
+  }
+
+  const handleToggleMobile = () => {
+    setMobileOpen((prev) => !prev)
+  }
+
+  const handleCloseMobile = () => {
+    setMobileOpen(false)
+  }
 
   return (
-    <nav className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+    <nav className="fixed top-4 left-1/2 z-50 w-full max-w-[1200px] -translate-x-1/2 px-4 sm:px-6">
       <div
-        className={cn(
-          "mx-auto rounded-2xl backdrop-blur-sm border transition-all duration-300 shadow-lg",
+        className={
           isScrolled
-            ? " supports-[backdrop-filter]:bg-white/60"
-            : "bg-white/10 border-white/10"
-        )}
+            ? "mx-auto rounded-[16px] border border-snow/10 bg-not-quite-black/80 backdrop-blur-md"
+            : "mx-auto rounded-[16px] border border-snow/10 bg-snow/5 backdrop-blur-md"
+        }
       >
-        <div className="flex items-center justify-between px-6 py-4">
-          {/* Logo P y Pixel3D juntos - Izquierda */}
+        <div className="flex items-center justify-between px-6 py-3">
           <Link
             href="/"
-            className="flex items-center gap-3 hover:opacity-80 transition-opacity"
+            className="flex items-center gap-3 hover:opacity-80"
+            aria-label="Pixel3D inicio"
           >
             <Image
               src="/logo/p.png"
               width={40}
               height={40}
-              alt="Pixel P logo"
-              className="w-10 h-10"
+              alt=""
+              className="h-10 w-10"
             />
             <Image
-              src={isScrolled ? "/logo/pixel3d.png" : "/logo/pixel3d-w.png"}
+              src="/logo/pixel3d-w.png"
               width={140}
               height={35}
-              alt="Pixel3D logo"
+              alt="Pixel3D"
               className="h-6 w-auto"
             />
           </Link>
 
-          {/* Navegación y acciones - Centro/Derecha */}
-          <div className="hidden md:flex items-center gap-8">
-            {/* Link de navegación */}
+          <div className="hidden items-center gap-6 md:flex">
             <Link
-              href="/products"
-              className={cn(
-                "text-sm font-medium transition-colors duration-200",
-                isScrolled
-                  ? "text-slate-700 hover:text-purple-700"
-                  : "text-white hover:text-purple-600"
-              )}
+              href="/"
+              className="text-base font-medium tracking-[0.013em] text-snow hover:text-hover-blurple"
             >
-              Productos
+              Catálogo
             </Link>
-
-            {/* Redes sociales */}
-            <div className="flex items-center gap-4">
-              <Link
-                href="https://www.instagram.com/pixel3dmx/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="relative group"
-              >
-                <Image
-                  src="/logo/insta.png"
-                  alt="Instagram"
-                  width={20}
-                  height={20}
-                  className={cn(
-                    "w-6 h-6 transition-all duration-300",
-                    isScrolled
-                      ? "opacity-70 hover:opacity-100"
-                      : "opacity-90 hover:opacity-100"
-                  )}
-                />
-              </Link>
-              <Link
-                href="https://www.tiktok.com/@pixel3d83"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="relative group"
-              >
-                <Image
-                  src="/logo/tiktok.png"
-                  alt="TikTok"
-                  width={20}
-                  height={20}
-                  className={cn(
-                    "w-6 h-6 transition-all duration-300",
-                    isScrolled
-                      ? "opacity-70 hover:opacity-100"
-                      : "opacity-90 hover:opacity-100"
-                  )}
-                />
-              </Link>
-            </div>
-
-            {/* Carrito */}
-            <Link href="/checkout" className="relative">
-              <ShoppingCartIcon
-                className={cn(
-                  "h-6 w-6 transition-colors",
-                  isScrolled
-                    ? "text-slate-700 hover:text-purple-700"
-                    : "text-white hover:text-purple-600"
+            <Link
+              href="/nosotros"
+              className="text-base font-medium tracking-[0.013em] text-snow hover:text-hover-blurple"
+            >
+              Nosotros
+            </Link>
+            <Link
+              href="/nosotros#contacto"
+              className="text-base font-medium tracking-[0.013em] text-snow hover:text-hover-blurple"
+            >
+              Contacto
+            </Link>
+            <Button asChild variant="login" size="sm" className="shrink-0">
+              <Link href="/checkout" aria-label="Carrito de compras">
+                <ShoppingCartIcon className="size-5" />
+                Carrito
+                {cartCount > 0 && (
+                  <Badge className="bg-blurple text-snow">{cartCount}</Badge>
                 )}
-              />
-              {cartCount > 0 && (
-                <span className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white font-semibold">
-                  {cartCount}
-                </span>
-              )}
-            </Link>
+              </Link>
+            </Button>
           </div>
 
-          {/* Menú móvil - Derecha */}
-          <div className="flex items-center gap-3 md:hidden">
-            <Link href="/checkout" className="relative">
-              <ShoppingCartIcon
-                className={cn(
-                  "h-6 w-6 transition-colors",
-                  isScrolled
-                    ? "text-slate-700 hover:text-purple-700"
-                    : "text-white"
-                )}
-              />
+          <div className="flex items-center gap-2 md:hidden">
+            <Link href="/checkout" className="relative text-snow" aria-label="Carrito">
+              <ShoppingCartIcon className="h-6 w-6" />
               {cartCount > 0 && (
-                <span className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white">
+                <span className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-blurple text-xs font-semibold text-snow">
                   {cartCount}
                 </span>
               )}
             </Link>
             <Button
               variant="ghost"
-              className={cn(
-                isScrolled
-                  ? "text-slate-700 hover:bg-slate-100"
-                  : "text-white hover:bg-white/20"
-              )}
-              onClick={() => setMobileOpen((prev) => !prev)}
+              size="icon"
+              onClick={handleToggleMobile}
+              aria-label={mobileOpen ? "Cerrar menú" : "Abrir menú"}
             >
               {mobileOpen ? (
                 <XMarkIcon className="h-6 w-6" />
@@ -182,82 +135,39 @@ export const Navbar = () => {
         </div>
       </div>
 
-      {/* Menú móvil desplegable */}
       {mobileOpen && (
-        <div
-          className={cn(
-            "md:hidden mt-2 mx-auto max-w-7xl px-4 rounded-2xl border shadow-lg",
-            isScrolled
-              ? "bg-white/95 backdrop-blur-md border-slate-200/50"
-              : "bg-white/40 backdrop-blur-md border-white/30"
-          )}
-        >
-          <ul className="flex flex-col p-4 space-y-3">
+        <div className="mt-2 rounded-[16px] border border-snow/10 bg-not-quite-black/95 p-4 backdrop-blur-md md:hidden">
+          <ul className="space-y-2">
             <li>
               <Link
-                href="/products"
-                onClick={() => setMobileOpen(false)}
-                className={cn(
-                  "block px-4 py-2 rounded-xl transition-colors",
-                  isScrolled
-                    ? "text-slate-700 hover:bg-purple-50 hover:text-purple-700"
-                    : "text-slate-800 hover:bg-white/20"
-                )}
+                href="/"
+                onClick={handleCloseMobile}
+                className="block rounded-[12px] px-4 py-2 text-snow hover:bg-snow/10"
               >
-                Productos
+                Catálogo
               </Link>
             </li>
-            <li className="pt-3 border-t border-slate-300/30">
-              <div className="flex items-center gap-4 px-4">
-                <Link
-                  href="https://www.instagram.com/pixel3dmx/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 transition-opacity hover:opacity-80"
-                >
-                  <Image
-                    src="/logo/insta.png"
-                    alt="Instagram"
-                    width={20}
-                    height={20}
-                    className="w-5 h-5"
-                  />
-                  <span
-                    className={cn(
-                      "text-sm",
-                      isScrolled ? "text-slate-700" : "text-slate-800"
-                    )}
-                  >
-                    Instagram
-                  </span>
-                </Link>
-                <Link
-                  href="https://www.tiktok.com/@pixel3d83"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 transition-opacity hover:opacity-80"
-                >
-                  <Image
-                    src="/logo/tiktok.png"
-                    alt="TikTok"
-                    width={20}
-                    height={20}
-                    className="w-5 h-5"
-                  />
-                  <span
-                    className={cn(
-                      "text-sm",
-                      isScrolled ? "text-slate-700" : "text-slate-800"
-                    )}
-                  >
-                    TikTok
-                  </span>
-                </Link>
-              </div>
+            <li>
+              <Link
+                href="/nosotros"
+                onClick={handleCloseMobile}
+                className="block rounded-[12px] px-4 py-2 text-snow hover:bg-snow/10"
+              >
+                Nosotros
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/nosotros#contacto"
+                onClick={handleCloseMobile}
+                className="block rounded-[12px] px-4 py-2 text-snow hover:bg-snow/10"
+              >
+                Contacto
+              </Link>
             </li>
           </ul>
         </div>
       )}
     </nav>
-  );
-};
+  )
+}

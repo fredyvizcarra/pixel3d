@@ -1,66 +1,62 @@
-"use client";
+"use client"
 
-import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useCartStore } from "../../../store/cart-store";
-import { checkoutAction } from "./checkout-action";
+import Image from "next/image"
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { CatalogHero } from "@/components/catalog-hero"
+import { useCartStore } from "../../../store/cart-store"
+import { checkoutAction } from "./checkout-action"
 
 export default function CheckoutPage() {
-  const { items, removeItem, addItem } = useCartStore();
+  const { items, removeItem, addItem } = useCartStore()
   const total = items.reduce(
     (acc, item) => acc + item.price * item.quantity,
     0
-  );
+  )
+
+  const handleDecrease = (id: string) => {
+    removeItem(id)
+  }
+
+  const handleIncrease = (item: (typeof items)[number]) => {
+    addItem({ ...item, quantity: 1 })
+  }
 
   if (items.length === 0) {
     return (
-      <div className="container mx-auto px-4 py-8 text-center">
-        <h1 className="text-3xl font-bold mb-4">Your Cart is Empty</h1>
+      <div className="flex min-h-screen flex-col items-center justify-center px-4 text-center">
+        <h1 className="heading-display text-4xl">Tu carrito está vacío</h1>
+        <p className="mt-4 text-fog">Explora el catálogo y agrega una pieza.</p>
+        <Button asChild className="mt-8">
+          <Link href="/">Ver catálogo</Link>
+        </Button>
       </div>
-    );
+    )
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <div className="relative w-full overflow-hidden rounded-b-3xl bg-black">
-        <video
-          src="/hero/hero-video.mp4"
-          className="w-full h-60 object-cover"
-          autoPlay
-          loop
-          muted
-          playsInline
-        />
-        <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
-          <div className="bg-black/30 rounded-full px-4 py-1 text-xs uppercase tracking-[0.3em] text-white/80 mb-3">
-            Checkout
-          </div>
-          <h1 className="text-3xl font-semibold text-white sm:text-4xl lg:text-5xl">
-            Resumen y pago
-          </h1>
-          <p className="mt-3 text-base text-white/80 max-w-2xl">
-            Revisa tus artículos, ajusta cantidades y finaliza el pedido.
-          </p>
-        </div>
-      </div>
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div className="min-h-screen bg-cosmic">
+      <CatalogHero
+        kicker="Checkout"
+        title="Resumen y pago"
+        description="Revisa tus artículos, ajusta cantidades y finaliza el pedido."
+      />
+      <div className="mx-auto max-w-[1200px] px-4 py-12 sm:px-6">
         <div className="grid gap-8 lg:grid-cols-[1.4fr_0.8fr]">
-          <Card className="border border-slate-200 shadow-lg">
+          <Card className="pb-6">
             <CardHeader>
-              <CardTitle className="text-xl font-semibold text-slate-900">
-                Tus artículos
-              </CardTitle>
+              <CardTitle>Tus artículos</CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
               <ul className="space-y-6">
                 {items.map((item) => (
                   <li
                     key={item.id}
-                    className="flex flex-col gap-4 rounded-2xl bg-slate-50 p-4 sm:flex-row sm:items-center"
+                    className="flex flex-col gap-4 rounded-[16px] bg-not-quite-black p-4 sm:flex-row sm:items-center"
                   >
                     {item.imageUrl && (
-                      <div className="relative h-24 w-24 overflow-hidden rounded-2xl bg-white">
+                      <div className="relative h-24 w-24 overflow-hidden rounded-[16px] bg-void">
                         <Image
                           src={item.imageUrl}
                           alt={item.name}
@@ -72,14 +68,14 @@ export default function CheckoutPage() {
                     <div className="flex flex-1 flex-col gap-2">
                       <div className="flex items-center justify-between gap-4">
                         <div>
-                          <p className="text-base font-semibold text-slate-900">
+                          <p className="text-base font-semibold text-snow">
                             {item.name}
                           </p>
-                          <p className="text-sm text-slate-500">
+                          <p className="text-sm text-fog">
                             ${(item.price / 100 || 0).toFixed(2)} c/u
                           </p>
                         </div>
-                        <p className="text-lg font-semibold text-slate-900">
+                        <p className="text-lg font-semibold text-snow">
                           ${((item.price * item.quantity) / 100).toFixed(2)}
                         </p>
                       </div>
@@ -87,8 +83,8 @@ export default function CheckoutPage() {
                         <Button
                           variant="outline"
                           size="sm"
-                          className="rounded-full"
-                          onClick={() => removeItem(item.id)}
+                          onClick={() => handleDecrease(item.id)}
+                          aria-label={`Quitar una unidad de ${item.name}`}
                         >
                           –
                         </Button>
@@ -98,8 +94,8 @@ export default function CheckoutPage() {
                         <Button
                           variant="outline"
                           size="sm"
-                          className="rounded-full"
-                          onClick={() => addItem({ ...item, quantity: 1 })}
+                          onClick={() => handleIncrease(item)}
+                          aria-label={`Agregar una unidad de ${item.name}`}
                         >
                           +
                         </Button>
@@ -111,15 +107,13 @@ export default function CheckoutPage() {
             </CardContent>
           </Card>
 
-          <Card className="border border-slate-200 shadow-lg h-fit">
+          <Card className="h-fit pb-6">
             <CardHeader>
-              <CardTitle className="text-xl font-semibold text-slate-900">
-                Resumen de compra
-              </CardTitle>
+              <CardTitle>Resumen de compra</CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="space-y-2 text-sm text-slate-500">
-                <div className="flex justify-between text-base text-slate-700">
+              <div className="space-y-2 text-sm text-fog">
+                <div className="flex justify-between text-base text-snow">
                   <span>Subtotal</span>
                   <span>${(total / 100).toFixed(2)}</span>
                 </div>
@@ -133,7 +127,7 @@ export default function CheckoutPage() {
                 </div>
               </div>
 
-              <div className="flex items-center justify-between border-t pt-4 text-lg font-semibold text-slate-900">
+              <div className="flex items-center justify-between border-t border-dim-grey pt-4 text-lg font-semibold text-snow">
                 <span>Total</span>
                 <span>${(total / 100).toFixed(2)}</span>
               </div>
@@ -144,10 +138,7 @@ export default function CheckoutPage() {
                   name="items"
                   value={JSON.stringify(items)}
                 />
-                <Button
-                  type="submit"
-                  className="w-full rounded-full bg-[#662d91] hover:bg-purple-600 text-base py-6"
-                >
+                <Button type="submit" size="lg" className="w-full">
                   Proceder al pago
                 </Button>
               </form>
@@ -156,5 +147,5 @@ export default function CheckoutPage() {
         </div>
       </div>
     </div>
-  );
+  )
 }
