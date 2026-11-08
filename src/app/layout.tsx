@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { Navbar } from "@/components/navbar"
 import { SiteFooter } from "@/components/site-footer"
+import { Providers } from "@/components/providers"
 import { fontVariables } from "@/lib/fonts"
 import "./globals.css"
 
@@ -33,9 +34,11 @@ export default function RootLayout({
   return (
     <html lang="es" className={fontVariables}>
       <body className="flex min-h-screen flex-col bg-cosmic font-sans text-snow">
-        <Navbar />
-        <main className="w-full flex-grow">{children}</main>
-        <SiteFooter />
+        <Providers>
+          <Navbar />
+          <main className="w-full flex-grow">{children}</main>
+          <SiteFooter />
+        </Providers>
       </body>
     </html>
   )

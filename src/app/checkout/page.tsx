@@ -5,11 +5,13 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { CatalogHero } from "@/components/catalog-hero"
+import { useSession } from "next-auth/react"
 import { useCartStore } from "../../../store/cart-store"
 import { checkoutAction } from "./checkout-action"
 
 export default function CheckoutPage() {
   const { items, removeItem, addItem } = useCartStore()
+  const { status } = useSession()
   const total = items.reduce(
     (acc, item) => acc + item.price * item.quantity,
     0
@@ -131,6 +133,22 @@ export default function CheckoutPage() {
                 <span>Total</span>
                 <span>${(total / 100).toFixed(2)}</span>
               </div>
+
+              {status === "unauthenticated" && (
+                <div className="rounded-[12px] border border-line bg-cosmic/60 p-4 text-sm">
+                  <p className="font-medium text-snow">¿Quieres seguir tu pedido?</p>
+                  <p className="mt-1 text-fog">
+                    Entra con Google para ver tu guía de rastreo en tu cuenta.
+                    También puedes pagar como invitado.
+                  </p>
+                  <Link
+                    href="/entrar?callbackUrl=/checkout"
+                    className="mt-2 inline-block font-medium text-hover-blurple underline-offset-4 hover:underline"
+                  >
+                    Entrar con Google →
+                  </Link>
+                </div>
+              )}
 
               <form action={checkoutAction} className="space-y-4">
                 <input

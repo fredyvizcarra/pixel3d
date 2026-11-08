@@ -22,6 +22,20 @@
       "when": 1794113629923,
       "tag": "0002_collection_themes",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1794114959277,
+      "tag": "0003_customer_accounts",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1794114990777,
+      "tag": "0004_enable_rls_catalog",
+      "breakpoints": true
     }
   ]
 }

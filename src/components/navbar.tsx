@@ -2,7 +2,13 @@
 
 import Link from "next/link"
 import Image from "next/image"
-import { ShoppingCartIcon, Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline"
+import {
+  ShoppingCartIcon,
+  Bars3Icon,
+  XMarkIcon,
+  UserCircleIcon,
+} from "@heroicons/react/24/outline"
+import { useSession } from "next-auth/react"
 import { useCartStore } from "../../store/cart-store"
 import { useEffect, useState } from "react"
 import { usePathname } from "next/navigation"
@@ -19,6 +25,8 @@ export const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState<boolean>(false)
   const [mounted, setMounted] = useState<boolean>(false)
   const { items } = useCartStore()
+  const { data: session, status } = useSession()
+  const user = session?.user
   const cartCount = items.reduce((acc, item) => acc + item.quantity, 0)
 
   useEffect(() => {
@@ -86,6 +94,37 @@ export const Navbar = () => {
           )}
         </Link>
 
+        {status !== "loading" &&
+          (user ? (
+            <Link
+              href="/cuenta"
+              aria-label="Mi cuenta"
+              className="shrink-0 rounded-full ring-1 ring-line transition hover:ring-blurple"
+            >
+              {user.image ? (
+                <Image
+                  src={user.image}
+                  alt=""
+                  width={32}
+                  height={32}
+                  className="size-8 rounded-full"
+                />
+              ) : (
+                <span className="grid size-8 place-items-center rounded-full bg-blurple text-sm font-semibold">
+                  {(user.name ?? user.email ?? "?").charAt(0).toUpperCase()}
+                </span>
+              )}
+            </Link>
+          ) : (
+            <Link
+              href="/entrar"
+              className="hidden items-center gap-1.5 text-sm font-medium text-fog transition-colors hover:text-snow sm:flex"
+            >
+              <UserCircleIcon className="size-5" />
+              Entrar
+            </Link>
+          ))}
+
         <button
           type="button"
           onClick={() => setMobileOpen((prev) => !prev)}
@@ -111,6 +150,15 @@ export const Navbar = () => {
                 </Link>
               </li>
             ))}
+            <li>
+              <Link
+                href={user ? "/cuenta" : "/entrar"}
+                onClick={() => setMobileOpen(false)}
+                className="block rounded-[10px] px-3 py-2.5 text-snow hover:bg-snow/10"
+              >
+                {user ? "Mi cuenta" : "Entrar / crear cuenta"}
+              </Link>
+            </li>
           </ul>
         </div>
       )}
